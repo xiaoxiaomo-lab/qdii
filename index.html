@@ -7,49 +7,53 @@
 <style>
   :root {
     color-scheme: dark;
-    --bg:
-      radial-gradient(circle at top left, rgba(111, 88, 255, 0.16), transparent 26%),
-      radial-gradient(circle at top right, rgba(63, 179, 255, 0.16), transparent 24%),
-      linear-gradient(180deg, #0b1020 0%, #0e1630 38%, #0b1020 100%);
-    --panel: rgba(16, 21, 39, 0.8);
-    --panel-strong: rgba(22, 30, 53, 0.96);
-    --surface: rgba(255, 255, 255, 0.04);
-    --surface-strong: rgba(255, 255, 255, 0.08);
-    --line: rgba(255, 255, 255, 0.1);
-    --line-soft: rgba(255, 255, 255, 0.06);
-    --text: #f7f9fc;
-    --muted: #a9b3c8;
-    --blue: #67a5ff;
+    --panel: rgba(20, 27, 42, 0.86);
+    --panel-strong: rgba(30, 39, 58, 0.96);
+    --line: rgba(255, 255, 255, 0.11);
+    --text: #fbfdff;
+    --muted: #b3bfd5;
     --green: #30d158;
     --red: #ff647c;
-    --amber: #ffb340;
-    --purple: #8e7dff;
-    --shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
-    --toggle-thumb: #f7f9fc;
-    --toggle-icon: #101726;
+    --amber: #ff9f0a;
+    --cyan: #64d2ff;
+    --blue: #0a84ff;
+    --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    --page-bg:
+      radial-gradient(circle at top left, rgba(10, 132, 255, 0.18), transparent 30%),
+      radial-gradient(circle at top right, rgba(100, 210, 255, 0.1), transparent 24%),
+      linear-gradient(180deg, #111725 0%, #151c2c 48%, #0f1522 100%);
+    --header-chip-bg: rgba(255, 255, 255, 0.08);
+    --table-row-hover: rgba(255, 255, 255, 0.055);
+    --toggle-bg: rgba(255, 255, 255, 0.06);
+    --toggle-active-bg: rgba(255, 255, 255, 0.16);
+    --surface-inset: rgba(255, 255, 255, 0.05);
+    --toggle-thumb: #f5f7fb;
+    --toggle-active-icon: #0f1522;
   }
 
   body[data-theme="light"] {
     color-scheme: light;
-    --bg:
-      radial-gradient(circle at top left, rgba(111, 88, 255, 0.1), transparent 26%),
-      linear-gradient(180deg, #f5f7fc 0%, #eef2f8 50%, #f9fafc 100%);
-    --panel: rgba(255, 255, 255, 0.82);
-    --panel-strong: rgba(255, 255, 255, 0.96);
-    --surface: rgba(70, 84, 110, 0.05);
-    --surface-strong: rgba(70, 84, 110, 0.08);
-    --line: rgba(30, 41, 59, 0.1);
-    --line-soft: rgba(30, 41, 59, 0.06);
-    --text: #0f1728;
-    --muted: #667085;
-    --blue: #007aff;
+    --panel: rgba(255, 255, 255, 0.78);
+    --panel-strong: rgba(255, 255, 255, 0.94);
+    --line: rgba(60, 60, 67, 0.12);
+    --text: #111827;
+    --muted: #6b7280;
     --green: #16a34a;
     --red: #e11d48;
     --amber: #d97706;
-    --purple: #6f58ff;
-    --shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    --cyan: #0284c7;
+    --blue: #007aff;
+    --shadow: 0 18px 48px rgba(15, 23, 42, 0.08);
+    --page-bg:
+      radial-gradient(circle at top left, rgba(0, 122, 255, 0.12), transparent 28%),
+      linear-gradient(180deg, #f5f5f7 0%, #eff3f9 52%, #f7f8fb 100%);
+    --header-chip-bg: rgba(255, 255, 255, 0.72);
+    --table-row-hover: rgba(60, 60, 67, 0.045);
+    --toggle-bg: rgba(120, 120, 128, 0.12);
+    --toggle-active-bg: rgba(255, 255, 255, 0.96);
+    --surface-inset: rgba(255, 255, 255, 0.56);
     --toggle-thumb: #111827;
-    --toggle-icon: #ffffff;
+    --toggle-active-icon: #ffffff;
   }
 
   * {
@@ -60,50 +64,80 @@
     margin: 0;
     min-height: 100vh;
     font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    background: var(--bg);
+    background: var(--page-bg);
     color: var(--text);
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
-
   .shell {
-    width: min(1240px, calc(100vw - 28px));
+    width: min(980px, calc(100vw - 24px));
     margin: 0 auto;
-    padding: 18px 0 24px;
+    padding: 10px 0 16px;
   }
 
-  .topbar,
-  .hero,
-  .panel,
-  .stat-card,
-  .calc-panel {
-    backdrop-filter: blur(24px);
-    box-shadow: var(--shadow);
-  }
-
-  .topbar {
+  .hero {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    gap: 16px;
-    padding: 8px;
-    margin-bottom: 12px;
+    gap: 18px;
+    margin-bottom: 10px;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: clamp(24px, 2.6vw, 30px);
+    line-height: 1.08;
+    letter-spacing: 0;
+  }
+
+  .subtle {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 6px;
+  }
+
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .action-button {
     border: 1px solid var(--line);
-    border-radius: 22px;
-    background: var(--panel);
+    border-radius: 999px;
+    padding: 7px 12px;
+    background: var(--panel-strong);
+    color: var(--text);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    backdrop-filter: blur(20px);
+  }
+
+  .action-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .action-button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+    transform: none;
   }
 
   .theme-toggle {
     position: relative;
     display: inline-grid;
     grid-template-columns: repeat(2, 40px);
+    align-items: center;
+    gap: 0;
     padding: 3px;
     border: 1px solid var(--line);
     border-radius: 999px;
     background: var(--panel-strong);
+    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.04);
   }
 
   .theme-toggle::before {
@@ -115,7 +149,8 @@
     height: calc(100% - 6px);
     border-radius: 999px;
     background: var(--toggle-thumb);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.18);
+    transform: translateX(0);
     transition: transform 0.2s ease;
   }
 
@@ -126,24 +161,23 @@
   .theme-button {
     position: relative;
     z-index: 1;
-    width: 40px;
-    height: 32px;
     border: 0;
     border-radius: 999px;
+    width: 40px;
+    height: 32px;
+    padding: 0;
     background: transparent;
     color: var(--muted);
+    font: inherit;
     cursor: pointer;
-  }
-
-  .theme-button.active {
-    color: var(--toggle-icon);
+    transition: color 0.2s ease;
   }
 
   .theme-button svg {
     width: 16px;
     height: 16px;
-    margin: 0 auto;
     display: block;
+    margin: 0 auto;
     stroke: currentColor;
     fill: none;
     stroke-width: 1.8;
@@ -151,178 +185,50 @@
     stroke-linejoin: round;
   }
 
-  .hero {
-    position: relative;
+  .theme-button.active {
+    color: var(--toggle-active-icon);
+  }
+
+  .stats {
     display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-    gap: 14px;
-    padding: 18px;
-    border: 1px solid var(--line);
-    border-radius: 28px;
-    background: var(--panel);
-    overflow: hidden;
-  }
-
-  .hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(111, 88, 255, 0.2), rgba(63, 179, 255, 0.04));
-    pointer-events: none;
-  }
-
-  .hero-main,
-  .hero-side {
-    position: relative;
-    z-index: 1;
-  }
-
-  .eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: var(--surface);
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 700;
-  }
-
-  .eyebrow::before {
-    content: "";
-    width: 7px;
-    height: 7px;
-    border-radius: 999px;
-    background: var(--purple);
-  }
-
-  h1 {
-    margin: 14px 0 10px;
-    font-size: clamp(28px, 4vw, 42px);
-    line-height: 1.04;
-    letter-spacing: 0;
-  }
-
-  .hero-copy {
-    max-width: 620px;
-    color: var(--muted);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-
-  .hero-actions {
-    display: flex;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
-    margin-top: 18px;
-    flex-wrap: wrap;
+    margin-bottom: 10px;
   }
 
-  .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-width: 116px;
-    padding: 11px 16px;
-    border-radius: 14px;
-    border: 1px solid var(--line);
-    background: var(--panel-strong);
-    color: var(--text);
-    font: inherit;
-    font-size: 13px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-  }
-
-  .button:hover {
-    transform: translateY(-1px);
-  }
-
-  .button.primary {
-    border-color: rgba(111, 88, 255, 0.4);
-    background: linear-gradient(180deg, rgba(111, 88, 255, 0.24), rgba(63, 179, 255, 0.16));
-  }
-
-  .button:disabled {
-    opacity: 0.65;
-    cursor: wait;
-    transform: none;
-  }
-
-  .hero-side {
-    display: grid;
-    gap: 10px;
-  }
-
-  .pulse-card {
-    padding: 14px;
+  .stat,
+  .panel,
+  .calc-container {
+    padding: 14px 14px 13px;
     border: 1px solid var(--line);
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
-  }
-
-  .pulse-label {
-    color: var(--muted);
-    font-size: 11px;
-    margin-bottom: 8px;
-  }
-
-  .pulse-value {
-    font-size: 26px;
-    font-weight: 700;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .pulse-note {
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: 11px;
-    line-height: 1.5;
-  }
-
-  .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-    margin: 14px 0;
-  }
-
-  .stat-card,
-  .panel,
-  .calc-panel {
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(22px);
     position: relative;
     overflow: hidden;
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    background: var(--panel);
   }
 
-  .stat-card::before,
+  .stat::before,
   .panel::before,
-  .calc-panel::before {
+  .calc-container::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 26%);
     pointer-events: none;
-  }
-
-  .stat-card {
-    padding: 16px;
   }
 
   .stat-label {
     position: relative;
     color: var(--muted);
     font-size: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .stat-value {
     position: relative;
-    font-size: clamp(22px, 2.8vw, 30px);
+    font-size: clamp(22px, 2.5vw, 28px);
     font-weight: 700;
     font-variant-numeric: tabular-nums;
   }
@@ -330,64 +236,115 @@
   .stat-note,
   .panel-meta {
     position: relative;
-    margin-top: 8px;
+    margin-top: 5px;
     color: var(--muted);
     font-size: 11px;
   }
 
-  .positive {
-    color: var(--green);
-  }
-
-  .negative {
-    color: var(--red);
-  }
-
-  .neutral {
-    color: var(--muted);
-  }
-
   .panel {
-    padding: 16px;
+    padding: 14px;
   }
 
   .panel-header {
-    position: relative;
-    z-index: 1;
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
-    gap: 14px;
-    margin-bottom: 14px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding: 0 2px;
   }
 
   .panel-title {
     margin: 0;
-    font-size: 19px;
+    font-size: 17px;
+    letter-spacing: 0;
   }
 
-  .header-tools {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-
-  .status-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 13px;
-    border-radius: 999px;
+  .table-wrap {
+    overflow-x: auto;
     border: 1px solid var(--line);
-    background: var(--surface);
+    border-radius: 16px;
+    background: var(--surface-inset);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 12px 12px;
     color: var(--muted);
     font-size: 12px;
     font-weight: 600;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
   }
 
-  .status-pill::before {
+  tbody td {
+    padding: 13px 12px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    font-size: 13px;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tbody tr:hover {
+    background: var(--table-row-hover);
+  }
+
+  tbody.clickable tr {
+    cursor: pointer;
+  }
+
+  tbody.clickable tr.selected {
+    background: var(--table-row-hover);
+    box-shadow: inset 4px 0 0 var(--blue);
+  }
+
+  .symbol {
+    font-weight: 700;
+    font-size: 14px;
+  }
+
+  .name {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .positive {
+    color: var(--green);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .negative {
+    color: var(--red);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .neutral {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-radius: 999px;
+    background: var(--toggle-bg);
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1;
+    border: 1px solid var(--line);
+  }
+
+  .status::before {
     content: "";
     width: 8px;
     height: 8px;
@@ -395,42 +352,42 @@
     background: var(--amber);
   }
 
-  .status-pill.ready::before {
+  .status.ready::before {
     background: var(--green);
   }
 
-  .status-pill.error::before {
+  .status.error::before {
     background: var(--red);
   }
 
   .filters {
-    position: relative;
-    z-index: 1;
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    align-items: center;
+    gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 14px;
+    margin-bottom: 10px;
   }
 
   .tabs-wrapper {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
-    padding: 4px;
-    border-radius: 16px;
+    padding: 3px;
+    border-radius: 999px;
+    background: var(--toggle-bg);
     border: 1px solid var(--line);
-    background: var(--surface);
   }
 
   .tab-btn {
     border: 0;
-    padding: 8px 12px;
-    border-radius: 12px;
+    padding: 7px 12px;
+    border-radius: 999px;
     background: transparent;
     color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 600;
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
   }
@@ -448,188 +405,116 @@
 
   .search-icon {
     position: absolute;
-    left: 12px;
-    width: 13px;
-    height: 13px;
+    left: 10px;
+    width: 12px;
+    height: 12px;
     color: var(--muted);
     pointer-events: none;
   }
 
   .search-input {
-    width: 190px;
-    padding: 10px 12px 10px 34px;
-    border-radius: 14px;
     border: 1px solid var(--line);
-    background: var(--surface);
+    border-radius: 999px;
+    padding: 7px 12px 7px 28px;
+    background: var(--surface-inset);
     color: var(--text);
     font: inherit;
-    font-size: 12px;
+    font-size: 11px;
     outline: none;
+    width: 170px;
     transition: width 0.2s ease, border-color 0.2s ease;
   }
 
   .search-input:focus {
-    width: 240px;
-    border-color: var(--purple);
-  }
-
-  .table-wrap {
-    position: relative;
-    z-index: 1;
-    overflow-x: auto;
-    border: 1px solid var(--line);
-    border-radius: 18px;
-    background: var(--surface);
-  }
-
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-
-  th {
-    padding: 13px 14px;
-    color: var(--muted);
-    font-size: 12px;
-    font-weight: 700;
-    text-align: left;
-    border-bottom: 1px solid var(--line);
+    width: 210px;
+    border-color: var(--blue);
+    background: var(--panel-strong);
   }
 
   th.sortable {
     cursor: pointer;
     user-select: none;
     position: relative;
-    padding-right: 22px;
+    padding-right: 20px;
   }
 
   th.sortable::after {
     content: "↕";
     position: absolute;
-    right: 8px;
-    opacity: 0.32;
-    font-size: 10px;
+    right: 6px;
+    opacity: 0.3;
+    font-size: 9px;
   }
 
   th.sortable.asc::after {
     content: "↑";
-    opacity: 0.85;
-    color: var(--purple);
+    opacity: 0.8;
+    color: var(--blue);
   }
 
   th.sortable.desc::after {
     content: "↓";
-    opacity: 0.85;
-    color: var(--purple);
-  }
-
-  td {
-    padding: 14px;
-    font-size: 13px;
-    border-bottom: 1px solid var(--line-soft);
-    vertical-align: middle;
-  }
-
-  tbody tr:last-child td {
-    border-bottom: 0;
-  }
-
-  tbody.clickable tr {
-    cursor: pointer;
-  }
-
-  tbody.clickable tr:hover {
-    background: var(--surface);
-  }
-
-  tbody.clickable tr.selected {
-    background: rgba(111, 88, 255, 0.08);
-    box-shadow: inset 3px 0 0 var(--purple);
-  }
-
-  .fund-cell {
-    min-width: 280px;
-  }
-
-  .fund-name {
-    font-size: 14px;
-    font-weight: 700;
-  }
-
-  .fund-code {
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 11px;
-  }
-
-  .value-cell {
-    font-variant-numeric: tabular-nums;
-    font-weight: 700;
+    opacity: 0.8;
+    color: var(--blue);
   }
 
   .badge {
     display: inline-flex;
     align-items: center;
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    font-size: 10px;
     font-weight: 700;
-    line-height: 1;
-    border: 1px solid transparent;
+    line-height: 1.2;
   }
 
   .badge-discount {
     background: rgba(48, 209, 88, 0.12);
     color: var(--green);
-    border-color: rgba(48, 209, 88, 0.28);
+    border: 1px solid rgba(48, 209, 88, 0.25);
   }
 
   .badge-normal {
-    background: rgba(103, 165, 255, 0.12);
+    background: rgba(10, 132, 255, 0.12);
     color: var(--blue);
-    border-color: rgba(103, 165, 255, 0.28);
+    border: 1px solid rgba(10, 132, 255, 0.25);
   }
 
   .badge-warning {
-    background: rgba(255, 179, 64, 0.12);
+    background: rgba(255, 159, 10, 0.12);
     color: var(--amber);
-    border-color: rgba(255, 179, 64, 0.28);
+    border: 1px solid rgba(255, 159, 10, 0.25);
   }
 
   .badge-danger {
     background: rgba(255, 100, 124, 0.12);
     color: var(--red);
-    border-color: rgba(255, 100, 124, 0.28);
+    border: 1px solid rgba(255, 100, 124, 0.25);
   }
 
-  .bottom-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 330px;
-    gap: 12px;
-    margin-top: 12px;
-  }
-
-  .calc-panel {
-    padding: 16px;
+  .calc-container {
+    margin-top: 10px;
+    padding: 12px 14px;
+    border-radius: 16px;
+    background: var(--surface-inset);
     display: none;
   }
 
-  .calc-panel.active {
+  .calc-container.active {
     display: block;
   }
 
-  .calc-head {
+  .calc-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--line-soft);
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+    padding-bottom: 6px;
   }
 
   .calc-title {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 700;
   }
 
@@ -637,93 +522,96 @@
     border: 0;
     background: transparent;
     color: var(--muted);
-    font-size: 18px;
     cursor: pointer;
+    font-size: 14px;
+    padding: 0 4px;
   }
 
   .calc-body {
     display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 12px;
+    align-items: center;
   }
 
-  .calc-field {
+  .calc-input-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 5px;
   }
 
-  .calc-field label {
-    color: var(--muted);
+  .calc-input-group label {
     font-size: 11px;
+    color: var(--muted);
   }
 
   .calc-input-wrap {
     position: relative;
+    display: flex;
+    align-items: center;
   }
 
   .calc-input {
-    width: 100%;
-    padding: 11px 42px 11px 12px;
-    border-radius: 14px;
     border: 1px solid var(--line);
-    background: var(--surface);
+    border-radius: 8px;
+    padding: 6px 30px 6px 10px;
+    background: var(--panel-strong);
     color: var(--text);
     font: inherit;
-    font-size: 13px;
+    font-size: 12px;
+    width: 100%;
     outline: none;
   }
 
   .calc-unit {
     position: absolute;
-    right: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--muted);
+    right: 10px;
     font-size: 11px;
+    color: var(--muted);
   }
 
   .calc-metrics {
-    display: grid;
-    gap: 8px;
-    padding: 12px;
-    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: var(--surface-inset);
+    padding: 10px;
+    border-radius: 8px;
     border: 1px solid var(--line);
-    background: var(--surface);
   }
 
   .calc-row {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
     font-size: 12px;
   }
 
-  .calc-row strong {
-    font-variant-numeric: tabular-nums;
+  @media (max-width: 980px) {
+    .hero {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
   }
 
-  @media (max-width: 1120px) {
-    .hero,
-    .bottom-grid {
+  @media (max-width: 640px) {
+    .shell {
+      width: min(100vw - 18px, 100%);
+      padding-top: 14px;
+    }
+
+    .stats {
       grid-template-columns: 1fr;
     }
 
-    .stats-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-  }
-
-  @media (max-width: 720px) {
-    .shell {
-      width: min(100vw - 18px, 100%);
-      padding-top: 12px;
+    h1 {
+      font-size: 28px;
     }
 
-    .topbar,
-    .panel-header,
-    .filters {
+    .filters,
+    .panel-header {
+      align-items: stretch;
       flex-direction: column;
-      align-items: flex-start;
     }
 
     .search-input,
@@ -731,143 +619,125 @@
       width: 100%;
     }
 
-    .stats-grid {
+    .calc-body {
       grid-template-columns: 1fr;
+      gap: 10px;
     }
 
-    .hero-actions,
-    .header-tools,
-    .nav-group {
+    thead th,
+    tbody td {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+
+    .theme-toggle {
+      width: auto;
+    }
+
+    .action-button,
+    .theme-button {
       width: 100%;
-    }
-
-    .button {
-      flex: 1 1 0;
+      text-align: center;
     }
   }
 </style>
 </head>
 <body data-theme="dark">
 <div class="shell">
-  <nav class="topbar">
-    <div class="theme-toggle" role="tablist" aria-label="切换主题">
-      <button class="theme-button active" type="button" data-theme-value="dark" aria-label="深色主题">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
-        </svg>
-      </button>
-      <button class="theme-button" type="button" data-theme-value="light" aria-label="浅色主题">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <circle cx="12" cy="12" r="4"></circle>
-          <path d="M12 2v2.2M12 19.8V22M4.93 4.93l1.56 1.56M17.51 17.51l1.56 1.56M2 12h2.2M19.8 12H22M4.93 19.07l1.56-1.56M17.51 6.49l1.56-1.56"></path>
-        </svg>
-      </button>
+  <header class="hero">
+    <div>
+      <h1>QDII 溢价监控</h1>
+      <div class="subtle">实时参考净值、场内溢价率、折价回归模拟</div>
     </div>
-  </nav>
-
-  <section class="hero">
-    <div class="hero-main">
-      <div class="eyebrow">QDII Premium Monitor</div>
-      <h1>美股 QDII 溢价监控</h1>
-      <div class="hero-copy">
-        把所有美股相关 QDII 基金单独放进一张监控页里，统一按最新官方净值(T-1)计算场内溢价率。你在这里更适合做横向比较、筛高溢价、找折价和模拟回归风险。
-      </div>
-      <div class="hero-actions">
-        <button class="button primary" type="button" id="refreshButton">刷新数据</button>
+    <div class="controls">
+      <div class="theme-toggle" role="tablist" aria-label="切换主题">
+        <button class="theme-button active" type="button" data-theme-value="dark" aria-label="深色主题">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+          </svg>
+        </button>
+        <button class="theme-button" type="button" data-theme-value="light" aria-label="浅色主题">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2.2M12 19.8V22M4.93 4.93l1.56 1.56M17.51 17.51l1.56 1.56M2 12h2.2M19.8 12H22M4.93 19.07l1.56-1.56M17.51 6.49l1.56-1.56"></path>
+          </svg>
+        </button>
       </div>
     </div>
-    <div class="hero-side">
-      <article class="pulse-card">
-        <div class="pulse-label">当前口径</div>
-        <div class="pulse-value">T-1 净值</div>
-        <div class="pulse-note">优先使用行情源直接提供的场内溢价率和参考净值，和你盘中常见口径更接近。</div>
-      </article>
-      <article class="pulse-card">
-        <div class="pulse-label">监控范围</div>
-        <div class="pulse-value" id="fundCountHero">16</div>
-        <div class="pulse-note">纳斯达克100、标普500、美国50 三组美股 QDII ETF。</div>
-      </article>
-    </div>
-  </section>
+  </header>
 
-  <section class="stats-grid">
-    <article class="stat-card">
+  <section class="stats">
+    <article class="stat">
       <div class="stat-label">监控基金数</div>
-      <div class="stat-value" id="fundCount">--</div>
-      <div class="stat-note">当前列表中的全部美股 QDII</div>
+      <div class="stat-value neutral" id="fundCount">--</div>
+      <div class="stat-note">纳斯达克、标普500、美国50</div>
     </article>
-    <article class="stat-card">
+    <article class="stat">
       <div class="stat-label">最高溢价</div>
       <div class="stat-value neutral" id="maxPremium">--</div>
       <div class="stat-note" id="maxPremiumNote">等待数据</div>
     </article>
-    <article class="stat-card">
+    <article class="stat">
       <div class="stat-label">最大折价</div>
       <div class="stat-value neutral" id="minPremium">--</div>
       <div class="stat-note" id="minPremiumNote">等待数据</div>
     </article>
-    <article class="stat-card">
-      <div class="stat-label">中位溢价</div>
-      <div class="stat-value neutral" id="medianPremium">--</div>
-      <div class="stat-note">帮助判断整体热度</div>
-    </article>
   </section>
 
-  <div class="bottom-grid">
-    <section class="panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">基金列表</h2>
-          <div class="panel-meta">优先展示行情源实时口径；若缺失，再回退到最新净值(T-1)估算。</div>
-        </div>
-        <div class="header-tools">
-          <div class="status-pill" id="fetchStatus">加载中</div>
-        </div>
+  <section class="panel">
+    <div class="panel-header">
+      <div>
+        <h2 class="panel-title">基金列表</h2>
+        <div class="panel-meta">优先展示行情源实时口径；缺失时回退到最新净值估算</div>
       </div>
-
-      <div class="filters">
-        <div class="tabs-wrapper">
-          <button class="tab-btn active" type="button" data-index-type="all">全部</button>
-          <button class="tab-btn" type="button" data-index-type="nasdaq">纳斯达克 100</button>
-          <button class="tab-btn" type="button" data-index-type="sp500">标普 500</button>
-          <button class="tab-btn" type="button" data-index-type="us50">美国 50</button>
-        </div>
-        <div class="search-box">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input id="qdiiSearchInput" class="search-input" type="text" placeholder="搜索基金代码或简称" aria-label="搜索基金">
-        </div>
+      <div class="controls">
+        <div class="status" id="fetchStatus">加载中</div>
+        <button class="action-button" type="button" id="refreshButton">刷新</button>
       </div>
+    </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th class="sortable" data-sort="name">基金名称 / 代码</th>
-              <th class="sortable" data-sort="price">二级价格</th>
-              <th class="sortable" data-sort="nav">参考净值</th>
-              <th class="sortable desc" data-sort="premium">溢价率</th>
-              <th>状态</th>
-            </tr>
-          </thead>
-          <tbody id="qdiiTable" class="clickable">
-            <tr>
-              <td colspan="5" class="neutral">数据加载中...</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="filters">
+      <div class="tabs-wrapper">
+        <button class="tab-btn active" type="button" data-index-type="all">全部</button>
+        <button class="tab-btn" type="button" data-index-type="nasdaq">纳斯达克</button>
+        <button class="tab-btn" type="button" data-index-type="sp500">标普500</button>
+        <button class="tab-btn" type="button" data-index-type="us50">美国50</button>
       </div>
-    </section>
+      <div class="search-box">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input id="qdiiSearchInput" class="search-input" type="text" placeholder="搜索基金代码或简称" aria-label="搜索基金">
+      </div>
+    </div>
 
-    <aside class="calc-panel" id="premiumCalc">
-      <div class="calc-head">
-        <div class="calc-title" id="calcFundTitle">溢价折损模拟器</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="sortable" data-sort="name">基金名称 / 代码</th>
+            <th class="sortable" data-sort="price">二级价格</th>
+            <th class="sortable" data-sort="nav">参考净值</th>
+            <th class="sortable desc" data-sort="premium">溢价率</th>
+            <th>状态</th>
+          </tr>
+        </thead>
+        <tbody id="qdiiTable" class="clickable">
+          <tr>
+            <td colspan="5" class="neutral">数据加载中...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="calc-container" id="premiumCalc">
+      <div class="calc-header">
+        <span class="calc-title" id="calcFundTitle">溢价折损模拟器</span>
         <button class="calc-close" id="calcCloseBtn" type="button" aria-label="关闭">&times;</button>
       </div>
       <div class="calc-body">
-        <div class="calc-field">
+        <div class="calc-input-group">
           <label for="calcAmountInput">模拟买入金额</label>
           <div class="calc-input-wrap">
             <input class="calc-input" id="calcAmountInput" type="number" value="10000" min="100" step="100">
@@ -880,8 +750,8 @@
           <div class="calc-row"><span>预计折损金额</span><strong id="calcLossValue" class="neutral">--</strong></div>
         </div>
       </div>
-    </aside>
-  </div>
+    </div>
+  </section>
 </div>
 
 <script>
@@ -905,6 +775,7 @@ const qdiiList = [
   { symbol: "sz159577", fundCode: "159577", name: "汇添富MSCI美国50ETF", indexType: "us50" }
 ];
 
+const AUTO_REFRESH_MS = 60 * 1000;
 let isRefreshing = false;
 let qdiiData = [];
 let currentQdiiFilter = "all";
@@ -1094,32 +965,28 @@ function getPremiumMeta(premium) {
 function updateStatus(text, state) {
   const status = document.getElementById("fetchStatus");
   status.textContent = text;
-  status.className = `status-pill ${state || ""}`.trim();
+  status.className = `status ${state || ""}`.trim();
 }
 
 function setRefreshState(loading) {
   isRefreshing = loading;
   const button = document.getElementById("refreshButton");
   button.disabled = loading;
-  button.textContent = loading ? "刷新中..." : "刷新数据";
+  button.textContent = loading ? "刷新中..." : "刷新";
 }
 
 function updateSummaryCards(items) {
   const valid = items.filter(item => typeof item.premium === "number" && !Number.isNaN(item.premium));
   document.getElementById("fundCount").textContent = String(items.length);
-  document.getElementById("fundCountHero").textContent = String(items.length);
 
   if (valid.length === 0) {
+    document.getElementById("maxPremiumNote").textContent = "等待数据";
+    document.getElementById("minPremiumNote").textContent = "等待数据";
     return;
   }
 
   const max = valid.reduce((best, item) => item.premium > best.premium ? item : best, valid[0]);
   const min = valid.reduce((best, item) => item.premium < best.premium ? item : best, valid[0]);
-  const sorted = [...valid].sort((a, b) => a.premium - b.premium);
-  const middle = Math.floor(sorted.length / 2);
-  const median = sorted.length % 2 === 0
-    ? (sorted[middle - 1].premium + sorted[middle].premium) / 2
-    : sorted[middle].premium;
 
   const maxNode = document.getElementById("maxPremium");
   maxNode.textContent = formatPercent(max.premium);
@@ -1130,10 +997,6 @@ function updateSummaryCards(items) {
   minNode.textContent = formatPercent(min.premium);
   minNode.className = `stat-value ${getTrendClass(min.premium)}`;
   document.getElementById("minPremiumNote").textContent = min.name;
-
-  const medianNode = document.getElementById("medianPremium");
-  medianNode.textContent = formatPercent(median);
-  medianNode.className = `stat-value ${getTrendClass(median)}`;
 }
 
 function updateQdiiData(tencentData, qdiiNavMap) {
@@ -1212,16 +1075,16 @@ function renderQdiiTable() {
 
     const displayCode = item.symbol.replace(/^(sh|sz)/, "").toUpperCase();
     row.innerHTML = `
-      <td class="fund-cell">
-        <div class="fund-name">${item.name}</div>
-        <div class="fund-code">${displayCode} · ${item.symbol.startsWith("sh") ? "上交所" : "深交所"}</div>
+      <td>
+        <div class="symbol">${item.name}</div>
+        <div class="name">${displayCode} · ${item.symbol.startsWith("sh") ? "上交所" : "深交所"}</div>
       </td>
-      <td class="value-cell neutral">${item.price ? item.price.toFixed(3) : "--"}</td>
-      <td class="value-cell neutral">
+      <td class="neutral">${item.price ? item.price.toFixed(3) : "--"}</td>
+      <td class="neutral">
         ${item.nav ? item.nav.toFixed(3) : "--"}
-        <div class="fund-code">${item.navDate ? formatShortDate(item.navDate) : "实时口径"}</div>
+        <div class="name">${item.navDate ? formatShortDate(item.navDate) : "实时口径"}</div>
       </td>
-      <td class="value-cell ${getTrendClass(item.premium)}">${formatPercent(item.premium)}</td>
+      <td class="${getTrendClass(item.premium)}">${formatPercent(item.premium)}</td>
       <td><span class="badge ${item.premiumClass}">${item.premiumLabel}</span></td>
     `;
 
@@ -1356,6 +1219,9 @@ if (savedTheme === "light" || savedTheme === "dark") {
 
 initEvents();
 renderPage();
+setInterval(() => {
+  renderPage();
+}, AUTO_REFRESH_MS);
 </script>
 </body>
 </html>
