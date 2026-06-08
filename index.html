@@ -1006,12 +1006,12 @@ function updateSummaryCards(items) {
   const maxNode = document.getElementById("maxPremium");
   maxNode.textContent = formatPercent(max.premium);
   maxNode.className = `stat-value ${getTrendClass(max.premium)}`;
-  document.getElementById("maxPremiumNote").textContent = max.name;
+  document.getElementById("maxPremiumNote").textContent = `${max.name} · ${max.symbol.replace(/^(sh|sz)/, "").toUpperCase()}`;
 
   const minNode = document.getElementById("minPremium");
   minNode.textContent = formatPercent(min.premium);
   minNode.className = `stat-value ${getTrendClass(min.premium)}`;
-  document.getElementById("minPremiumNote").textContent = min.name;
+  document.getElementById("minPremiumNote").textContent = `${min.name} · ${min.symbol.replace(/^(sh|sz)/, "").toUpperCase()}`;
 }
 
 function updateQdiiData(tencentData, qdiiNavMap) {
