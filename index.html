@@ -767,10 +767,12 @@ const qdiiList = [
   { symbol: "sh513390", fundCode: "513390", name: "纳指100ETF博时", indexType: "nasdaq" },
   { symbol: "sz159513", fundCode: "159513", name: "纳斯达克100ETF大成", indexType: "nasdaq" },
   { symbol: "sz159509", fundCode: "159509", name: "纳指科技ETF景顺", indexType: "nasdaq" },
+  { symbol: "sz161130", fundCode: "161130", name: "纳斯达克100LOF", indexType: "nasdaq" },
   { symbol: "sh513500", fundCode: "513500", name: "标普500ETF博时", indexType: "sp500" },
   { symbol: "sz159655", fundCode: "159655", name: "标普500ETF华夏", indexType: "sp500" },
   { symbol: "sh513650", fundCode: "513650", name: "标普500ETF南方", indexType: "sp500" },
   { symbol: "sz159612", fundCode: "159612", name: "标普500ETF国泰", indexType: "sp500" },
+  { symbol: "sz161125", fundCode: "161125", name: "标普500LOF", indexType: "sp500" },
   { symbol: "sh513850", fundCode: "513850", name: "美国50ETF易方达", indexType: "us50" },
   { symbol: "sz159577", fundCode: "159577", name: "美国50ETF汇添富", indexType: "us50" }
 ];
@@ -940,6 +942,19 @@ async function fetchQdiiNavMap() {
       navMap[item.symbol] = await fetchLatestFundNav(item.fundCode);
     } catch (error) {
       console.error(`Failed to load NAV for ${item.symbol}`, error);
+      navMap[item.symbol] = undefined;
+    }
+  }
+  return navMap;
+}
+
+async function fetchFallbackNavMap(items) {
+  const navMap = {};
+  for (const item of items) {
+    try {
+      navMap[item.symbol] = await fetchLatestFundNav(item.fundCode);
+    } catch (error) {
+      console.error(`Failed to load fallback NAV for ${item.symbol}`, error);
       navMap[item.symbol] = undefined;
     }
   }
@@ -1133,9 +1148,7 @@ async function renderPage() {
   try {
     const symbols = qdiiList.map(item => item.symbol);
     const tencentData = await fetchTencentData(symbols);
-    const qdiiNavMap = await fetchQdiiNavMap();
-
-    updateQdiiData(tencentData, qdiiNavMap);
+    updateQdiiData(tencentData, {});
     updateSummaryCards(qdiiData);
     renderQdiiTable();
 
@@ -1152,6 +1165,36 @@ async function renderPage() {
       minute: "2-digit"
     });
     updateStatus(`已更新 ${updatedAt}`, "ready");
+
+    const missingNavItems = qdiiList.filter(item => {
+      const data = tencentData[item.symbol];
+      const hasLiveNav = typeof data?.nav === "number" && !Number.isNaN(data.nav) && data.nav > 0;
+      const hasLivePremium = typeof data?.premium === "number" && !Number.isNaN(data.premium);
+      return !hasLiveNav || !hasLivePremium;
+    });
+
+    if (missingNavItems.length > 0) {
+      fetchFallbackNavMap(missingNavItems)
+        .then(fallbackNavMap => {
+          if (Object.keys(fallbackNavMap).length === 0) {
+            return;
+          }
+
+          updateQdiiData(tencentData, fallbackNavMap);
+          updateSummaryCards(qdiiData);
+          renderQdiiTable();
+
+          if (selectedQdiiSymbol) {
+            const selected = qdiiData.find(item => item.symbol === selectedQdiiSymbol);
+            if (selected) {
+              selectQdiiRow(selected);
+            }
+          }
+        })
+        .catch(error => {
+          console.error("Failed to hydrate fallback NAV data", error);
+        });
+    }
   } catch (error) {
     console.error(error);
     document.getElementById("qdiiTable").innerHTML = `<tr><td colspan="5" class="negative">数据加载失败</td></tr>`;
