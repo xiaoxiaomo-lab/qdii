@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QDII 溢价监控</title>
+<style>
+  :root {
+    color-scheme: dark;
+    --bg:
+      radial-gradient(circle at top left, rgba(111, 88, 255, 0.16), transparent 26%),
+      radial-gradient(circle at top right, rgba(63, 179, 255, 0.16), transparent 24%),
+      linear-gradient(180deg, #0b1020 0%, #0e1630 38%, #0b1020 100%);
+    --panel: rgba(16, 21, 39, 0.8);
+    --panel-strong: rgba(22, 30, 53, 0.96);
+    --surface: rgba(255, 255, 255, 0.04);
+    --surface-strong: rgba(255, 255, 255, 0.08);
+    --line: rgba(255, 255, 255, 0.1);
+    --line-soft: rgba(255, 255, 255, 0.06);
+    --text: #f7f9fc;
+    --muted: #a9b3c8;
+    --blue: #67a5ff;
+    --green: #30d158;
+    --red: #ff647c;
+    --amber: #ffb340;
+    --purple: #8e7dff;
+    --shadow: 0 24px 70px rgba(0, 0, 0, 0.3);
+    --toggle-thumb: #f7f9fc;
+    --toggle-icon: #101726;
+  }
+
+  body[data-theme="light"] {
+    color-scheme: light;
+    --bg:
+      radial-gradient(circle at top left, rgba(111, 88, 255, 0.1), transparent 26%),
+      linear-gradient(180deg, #f5f7fc 0%, #eef2f8 50%, #f9fafc 100%);
+    --panel: rgba(255, 255, 255, 0.82);
+    --panel-strong: rgba(255, 255, 255, 0.96);
+    --surface: rgba(70, 84, 110, 0.05);
+    --surface-strong: rgba(70, 84, 110, 0.08);
+    --line: rgba(30, 41, 59, 0.1);
+    --line-soft: rgba(30, 41, 59, 0.06);
+    --text: #0f1728;
+    --muted: #667085;
+    --blue: #007aff;
+    --green: #16a34a;
+    --red: #e11d48;
+    --amber: #d97706;
+    --purple: #6f58ff;
+    --shadow: 0 24px 60px rgba(15, 23, 42, 0.08);
+    --toggle-thumb: #111827;
+    --toggle-icon: #ffffff;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: "SF Pro Display", "SF Pro Text", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .shell {
+    width: min(1240px, calc(100vw - 28px));
+    margin: 0 auto;
+    padding: 18px 0 24px;
+  }
+
+  .topbar,
+  .hero,
+  .panel,
+  .stat-card,
+  .calc-panel {
+    backdrop-filter: blur(24px);
+    box-shadow: var(--shadow);
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: 1px solid var(--line);
+    border-radius: 22px;
+    background: var(--panel);
+  }
+
+  .theme-toggle {
+    position: relative;
+    display: inline-grid;
+    grid-template-columns: repeat(2, 40px);
+    padding: 3px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--panel-strong);
+  }
+
+  .theme-toggle::before {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 40px;
+    height: calc(100% - 6px);
+    border-radius: 999px;
+    background: var(--toggle-thumb);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+    transition: transform 0.2s ease;
+  }
+
+  body[data-theme="light"] .theme-toggle::before {
+    transform: translateX(40px);
+  }
+
+  .theme-button {
+    position: relative;
+    z-index: 1;
+    width: 40px;
+    height: 32px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .theme-button.active {
+    color: var(--toggle-icon);
+  }
+
+  .theme-button svg {
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
+    display: block;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 28px;
+    background: var(--panel);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(111, 88, 255, 0.2), rgba(63, 179, 255, 0.04));
+    pointer-events: none;
+  }
+
+  .hero-main,
+  .hero-side {
+    position: relative;
+    z-index: 1;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .eyebrow::before {
+    content: "";
+    width: 7px;
+    height: 7px;
+    border-radius: 999px;
+    background: var(--purple);
+  }
+
+  h1 {
+    margin: 14px 0 10px;
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.04;
+    letter-spacing: 0;
+  }
+
+  .hero-copy {
+    max-width: 620px;
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+
+  .button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-width: 116px;
+    padding: 11px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--panel-strong);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  }
+
+  .button:hover {
+    transform: translateY(-1px);
+  }
+
+  .button.primary {
+    border-color: rgba(111, 88, 255, 0.4);
+    background: linear-gradient(180deg, rgba(111, 88, 255, 0.24), rgba(63, 179, 255, 0.16));
+  }
+
+  .button:disabled {
+    opacity: 0.65;
+    cursor: wait;
+    transform: none;
+  }
+
+  .hero-side {
+    display: grid;
+    gap: 10px;
+  }
+
+  .pulse-card {
+    padding: 14px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .pulse-label {
+    color: var(--muted);
+    font-size: 11px;
+    margin-bottom: 8px;
+  }
+
+  .pulse-value {
+    font-size: 26px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pulse-note {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin: 14px 0;
+  }
+
+  .stat-card,
+  .panel,
+  .calc-panel {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    background: var(--panel);
+  }
+
+  .stat-card::before,
+  .panel::before,
+  .calc-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 24%);
+    pointer-events: none;
+  }
+
+  .stat-card {
+    padding: 16px;
+  }
+
+  .stat-label {
+    position: relative;
+    color: var(--muted);
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .stat-value {
+    position: relative;
+    font-size: clamp(22px, 2.8vw, 30px);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stat-note,
+  .panel-meta {
+    position: relative;
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .positive {
+    color: var(--green);
+  }
+
+  .negative {
+    color: var(--red);
+  }
+
+  .neutral {
+    color: var(--muted);
+  }
+
+  .panel {
+    padding: 16px;
+  }
+
+  .panel-header {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .panel-title {
+    margin: 0;
+    font-size: 19px;
+  }
+
+  .header-tools {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 13px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .status-pill::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--amber);
+  }
+
+  .status-pill.ready::before {
+    background: var(--green);
+  }
+
+  .status-pill.error::before {
+    background: var(--red);
+  }
+
+  .filters {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 14px;
+  }
+
+  .tabs-wrapper {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 4px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .tab-btn {
+    border: 0;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: transparent;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .tab-btn.active {
+    background: var(--panel-strong);
+    color: var(--text);
+  }
+
+  .search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 12px;
+    width: 13px;
+    height: 13px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 190px;
+    padding: 10px 12px 10px 34px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 12px;
+    outline: none;
+    transition: width 0.2s ease, border-color 0.2s ease;
+  }
+
+  .search-input:focus {
+    width: 240px;
+    border-color: var(--purple);
+  }
+
+  .table-wrap {
+    position: relative;
+    z-index: 1;
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    background: var(--surface);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th {
+    padding: 13px 14px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+  }
+
+  th.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    padding-right: 22px;
+  }
+
+  th.sortable::after {
+    content: "↕";
+    position: absolute;
+    right: 8px;
+    opacity: 0.32;
+    font-size: 10px;
+  }
+
+  th.sortable.asc::after {
+    content: "↑";
+    opacity: 0.85;
+    color: var(--purple);
+  }
+
+  th.sortable.desc::after {
+    content: "↓";
+    opacity: 0.85;
+    color: var(--purple);
+  }
+
+  td {
+    padding: 14px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--line-soft);
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  tbody.clickable tr {
+    cursor: pointer;
+  }
+
+  tbody.clickable tr:hover {
+    background: var(--surface);
+  }
+
+  tbody.clickable tr.selected {
+    background: rgba(111, 88, 255, 0.08);
+    box-shadow: inset 3px 0 0 var(--purple);
+  }
+
+  .fund-cell {
+    min-width: 280px;
+  }
+
+  .fund-name {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .fund-code {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .value-cell {
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    border: 1px solid transparent;
+  }
+
+  .badge-discount {
+    background: rgba(48, 209, 88, 0.12);
+    color: var(--green);
+    border-color: rgba(48, 209, 88, 0.28);
+  }
+
+  .badge-normal {
+    background: rgba(103, 165, 255, 0.12);
+    color: var(--blue);
+    border-color: rgba(103, 165, 255, 0.28);
+  }
+
+  .badge-warning {
+    background: rgba(255, 179, 64, 0.12);
+    color: var(--amber);
+    border-color: rgba(255, 179, 64, 0.28);
+  }
+
+  .badge-danger {
+    background: rgba(255, 100, 124, 0.12);
+    color: var(--red);
+    border-color: rgba(255, 100, 124, 0.28);
+  }
+
+  .bottom-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .calc-panel {
+    padding: 16px;
+    display: none;
+  }
+
+  .calc-panel.active {
+    display: block;
+  }
+
+  .calc-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .calc-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .calc-close {
+    border: 0;
+    background: transparent;
+    color: var(--muted);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  .calc-body {
+    display: grid;
+    gap: 12px;
+  }
+
+  .calc-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .calc-field label {
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .calc-input-wrap {
+    position: relative;
+  }
+
+  .calc-input {
+    width: 100%;
+    padding: 11px 42px 11px 12px;
+    border-radius: 14px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+    color: var(--text);
+    font: inherit;
+    font-size: 13px;
+    outline: none;
+  }
+
+  .calc-unit {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .calc-metrics {
+    display: grid;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .calc-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+  }
+
+  .calc-row strong {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (max-width: 1120px) {
+    .hero,
+    .bottom-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 720px) {
+    .shell {
+      width: min(100vw - 18px, 100%);
+      padding-top: 12px;
+    }
+
+    .topbar,
+    .panel-header,
+    .filters {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .search-input,
+    .search-input:focus {
+      width: 100%;
+    }
+
+    .stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .hero-actions,
+    .header-tools,
+    .nav-group {
+      width: 100%;
+    }
+
+    .button {
+      flex: 1 1 0;
+    }
+  }
+</style>
+</head>
+<body data-theme="dark">
+<div class="shell">
+  <nav class="topbar">
+    <div class="theme-toggle" role="tablist" aria-label="切换主题">
+      <button class="theme-button active" type="button" data-theme-value="dark" aria-label="深色主题">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+        </svg>
+      </button>
+      <button class="theme-button" type="button" data-theme-value="light" aria-label="浅色主题">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2.2M12 19.8V22M4.93 4.93l1.56 1.56M17.51 17.51l1.56 1.56M2 12h2.2M19.8 12H22M4.93 19.07l1.56-1.56M17.51 6.49l1.56-1.56"></path>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-main">
+      <div class="eyebrow">QDII Premium Monitor</div>
+      <h1>美股 QDII 溢价监控</h1>
+      <div class="hero-copy">
+        把所有美股相关 QDII 基金单独放进一张监控页里，统一按最新官方净值(T-1)计算场内溢价率。你在这里更适合做横向比较、筛高溢价、找折价和模拟回归风险。
+      </div>
+      <div class="hero-actions">
+        <button class="button primary" type="button" id="refreshButton">刷新数据</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <article class="pulse-card">
+        <div class="pulse-label">当前口径</div>
+        <div class="pulse-value">T-1 净值</div>
+        <div class="pulse-note">优先使用行情源直接提供的场内溢价率和参考净值，和你盘中常见口径更接近。</div>
+      </article>
+      <article class="pulse-card">
+        <div class="pulse-label">监控范围</div>
+        <div class="pulse-value" id="fundCountHero">16</div>
+        <div class="pulse-note">纳斯达克100、标普500、美国50 三组美股 QDII ETF。</div>
+      </article>
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <div class="stat-label">监控基金数</div>
+      <div class="stat-value" id="fundCount">--</div>
+      <div class="stat-note">当前列表中的全部美股 QDII</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">最高溢价</div>
+      <div class="stat-value neutral" id="maxPremium">--</div>
+      <div class="stat-note" id="maxPremiumNote">等待数据</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">最大折价</div>
+      <div class="stat-value neutral" id="minPremium">--</div>
+      <div class="stat-note" id="minPremiumNote">等待数据</div>
+    </article>
+    <article class="stat-card">
+      <div class="stat-label">中位溢价</div>
+      <div class="stat-value neutral" id="medianPremium">--</div>
+      <div class="stat-note">帮助判断整体热度</div>
+    </article>
+  </section>
+
+  <div class="bottom-grid">
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">基金列表</h2>
+          <div class="panel-meta">优先展示行情源实时口径；若缺失，再回退到最新净值(T-1)估算。</div>
+        </div>
+        <div class="header-tools">
+          <div class="status-pill" id="fetchStatus">加载中</div>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="tabs-wrapper">
+          <button class="tab-btn active" type="button" data-index-type="all">全部</button>
+          <button class="tab-btn" type="button" data-index-type="nasdaq">纳斯达克 100</button>
+          <button class="tab-btn" type="button" data-index-type="sp500">标普 500</button>
+          <button class="tab-btn" type="button" data-index-type="us50">美国 50</button>
+        </div>
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="qdiiSearchInput" class="search-input" type="text" placeholder="搜索基金代码或简称" aria-label="搜索基金">
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="sortable" data-sort="name">基金名称 / 代码</th>
+              <th class="sortable" data-sort="price">二级价格</th>
+              <th class="sortable" data-sort="nav">参考净值</th>
+              <th class="sortable desc" data-sort="premium">溢价率</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody id="qdiiTable" class="clickable">
+            <tr>
+              <td colspan="5" class="neutral">数据加载中...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <aside class="calc-panel" id="premiumCalc">
+      <div class="calc-head">
+        <div class="calc-title" id="calcFundTitle">溢价折损模拟器</div>
+        <button class="calc-close" id="calcCloseBtn" type="button" aria-label="关闭">&times;</button>
+      </div>
+      <div class="calc-body">
+        <div class="calc-field">
+          <label for="calcAmountInput">模拟买入金额</label>
+          <div class="calc-input-wrap">
+            <input class="calc-input" id="calcAmountInput" type="number" value="10000" min="100" step="100">
+            <span class="calc-unit">元</span>
+          </div>
+        </div>
+        <div class="calc-metrics">
+          <div class="calc-row"><span>当前溢价率</span><strong id="calcCurrentPremium" class="neutral">--</strong></div>
+          <div class="calc-row"><span>净值回归后市值</span><strong id="calcCleanValue">--</strong></div>
+          <div class="calc-row"><span>预计折损金额</span><strong id="calcLossValue" class="neutral">--</strong></div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const qdiiList = [
+  { symbol: "sh513100", fundCode: "513100", name: "国泰纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159941", fundCode: "159941", name: "广发纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sh513300", fundCode: "513300", name: "华夏纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159659", fundCode: "159659", name: "招商纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159501", fundCode: "159501", name: "嘉实纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159660", fundCode: "159660", name: "汇添富纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sh513110", fundCode: "513110", name: "华安纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159696", fundCode: "159696", name: "易方达纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sh513390", fundCode: "513390", name: "博时纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159513", fundCode: "159513", name: "国联安纳斯达克100ETF", indexType: "nasdaq" },
+  { symbol: "sz159509", fundCode: "159509", name: "纳指科技ETF", indexType: "nasdaq" },
+  { symbol: "sh513500", fundCode: "513500", name: "博时标普500ETF", indexType: "sp500" },
+  { symbol: "sz159655", fundCode: "159655", name: "华夏标普500ETF", indexType: "sp500" },
+  { symbol: "sh513650", fundCode: "513650", name: "大成标普500ETF", indexType: "sp500" },
+  { symbol: "sz159612", fundCode: "159612", name: "国泰标普500ETF", indexType: "sp500" },
+  { symbol: "sh513850", fundCode: "513850", name: "易方达MSCI美国50ETF", indexType: "us50" },
+  { symbol: "sz159577", fundCode: "159577", name: "汇添富MSCI美国50ETF", indexType: "us50" }
+];
+
+let isRefreshing = false;
+let qdiiData = [];
+let currentQdiiFilter = "all";
+let currentQdiiSearch = "";
+let currentQdiiSort = { key: "premium", desc: true };
+let selectedQdiiSymbol = null;
+
+function applyTheme(theme) {
+  document.body.dataset.theme = theme;
+  document.querySelectorAll(".theme-button").forEach(button => {
+    button.classList.toggle("active", button.dataset.themeValue === theme);
+  });
+  localStorage.setItem("portfolio-theme", theme);
+}
+
+function formatPercent(value) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return "--";
+  }
+  const sign = value > 0 ? "+" : "";
+  return `${sign}${value.toFixed(2)}%`;
+}
+
+function getTrendClass(value) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return "neutral";
+  }
+  if (value > 0) {
+    return "positive";
+  }
+  if (value < 0) {
+    return "negative";
+  }
+  return "neutral";
+}
+
+function formatShortDate(value) {
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+    return "--";
+  }
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
+  return `${month}-${day}`;
+}
+
+async function fetchTencentData(symbols) {
+  const url = `https://qt.gtimg.cn/q=${symbols.join(",")}`;
+  const res = await fetch(url);
+  const text = await res.text();
+  const lines = text.split(";");
+  const data = {};
+
+  lines.forEach(line => {
+    const match = line.match(/v_(.+)="(.+)"/);
+    if (!match) {
+      return;
+    }
+    const [, symbol, content] = match;
+    const fields = content.split("~");
+    data[symbol] = {
+      price: parseFloat(fields[3]),
+      premium: parseFloat(fields[77]),
+      nav: parseFloat(fields[78]),
+      iopv: parseFloat(fields[85])
+    };
+  });
+
+  return data;
+}
+
+function cleanupEastmoneyGlobals() {
+  [
+    "Data_netWorthTrend",
+    "Data_ACWorthTrend",
+    "Data_grandTotal",
+    "Data_rateInSimilarType",
+    "Data_rateInSimilarPersent",
+    "syl_1n",
+    "syl_6y",
+    "syl_3y",
+    "syl_1y",
+    "stockCodes",
+    "zqCodes",
+    "Data_fluctuationScale",
+    "Data_holderStructure",
+    "Data_assetAllocation",
+    "Data_performanceEvaluation",
+    "fS_name",
+    "fS_code",
+    "fund_sourceRate",
+    "fund_Rate",
+    "fund_minsg",
+    "fund_minsgall",
+    "fund_dtRate",
+    "ishb",
+    "weekSort",
+    "monthSort",
+    "yearSort",
+    "hj_jzrq",
+    "hj_jzzzl",
+    "Data_currentFundManager",
+    "Data_changeNetWorthTrend",
+    "Data_buySedemption",
+    "Data_CWYJ"
+  ].forEach(key => {
+    try {
+      delete window[key];
+    } catch (error) {
+      window[key] = undefined;
+    }
+  });
+}
+
+function loadEastmoneyFundScript(fundCode) {
+  return new Promise((resolve, reject) => {
+    cleanupEastmoneyGlobals();
+    const script = document.createElement("script");
+    script.src = `https://fund.eastmoney.com/pingzhongdata/${fundCode}.js?v=${Date.now()}`;
+    script.async = true;
+
+    script.onload = () => {
+      const trend = Array.isArray(window.Data_netWorthTrend) ? [...window.Data_netWorthTrend] : undefined;
+      cleanupEastmoneyGlobals();
+      script.remove();
+      resolve({ trend });
+    };
+
+    script.onerror = () => {
+      cleanupEastmoneyGlobals();
+      script.remove();
+      reject(new Error(`Failed to load fund data for ${fundCode}`));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+async function fetchLatestFundNav(fundCode) {
+  const { trend } = await loadEastmoneyFundScript(fundCode);
+  if (!Array.isArray(trend) || trend.length === 0) {
+    return undefined;
+  }
+
+  const latest = trend[trend.length - 1];
+  const nav = parseFloat(latest?.y);
+  const timestamp = Number(latest?.x);
+
+  if (!Number.isFinite(nav) || nav <= 0) {
+    return undefined;
+  }
+
+  return {
+    nav,
+    navDate: Number.isFinite(timestamp) ? new Date(timestamp) : undefined
+  };
+}
+
+async function fetchQdiiNavMap() {
+  const navMap = {};
+  for (const item of qdiiList) {
+    try {
+      navMap[item.symbol] = await fetchLatestFundNav(item.fundCode);
+    } catch (error) {
+      console.error(`Failed to load NAV for ${item.symbol}`, error);
+      navMap[item.symbol] = undefined;
+    }
+  }
+  return navMap;
+}
+
+function getPremiumMeta(premium) {
+  if (typeof premium !== "number" || Number.isNaN(premium)) {
+    return { premiumClass: "badge-normal", premiumLabel: "未知" };
+  }
+  if (premium < 0) {
+    return { premiumClass: "badge-discount", premiumLabel: "折价" };
+  }
+  if (premium < 1.5) {
+    return { premiumClass: "badge-normal", premiumLabel: "正常" };
+  }
+  if (premium < 3.0) {
+    return { premiumClass: "badge-warning", premiumLabel: "中溢价" };
+  }
+  return { premiumClass: "badge-danger", premiumLabel: "高溢价" };
+}
+
+function updateStatus(text, state) {
+  const status = document.getElementById("fetchStatus");
+  status.textContent = text;
+  status.className = `status-pill ${state || ""}`.trim();
+}
+
+function setRefreshState(loading) {
+  isRefreshing = loading;
+  const button = document.getElementById("refreshButton");
+  button.disabled = loading;
+  button.textContent = loading ? "刷新中..." : "刷新数据";
+}
+
+function updateSummaryCards(items) {
+  const valid = items.filter(item => typeof item.premium === "number" && !Number.isNaN(item.premium));
+  document.getElementById("fundCount").textContent = String(items.length);
+  document.getElementById("fundCountHero").textContent = String(items.length);
+
+  if (valid.length === 0) {
+    return;
+  }
+
+  const max = valid.reduce((best, item) => item.premium > best.premium ? item : best, valid[0]);
+  const min = valid.reduce((best, item) => item.premium < best.premium ? item : best, valid[0]);
+  const sorted = [...valid].sort((a, b) => a.premium - b.premium);
+  const middle = Math.floor(sorted.length / 2);
+  const median = sorted.length % 2 === 0
+    ? (sorted[middle - 1].premium + sorted[middle].premium) / 2
+    : sorted[middle].premium;
+
+  const maxNode = document.getElementById("maxPremium");
+  maxNode.textContent = formatPercent(max.premium);
+  maxNode.className = `stat-value ${getTrendClass(max.premium)}`;
+  document.getElementById("maxPremiumNote").textContent = max.name;
+
+  const minNode = document.getElementById("minPremium");
+  minNode.textContent = formatPercent(min.premium);
+  minNode.className = `stat-value ${getTrendClass(min.premium)}`;
+  document.getElementById("minPremiumNote").textContent = min.name;
+
+  const medianNode = document.getElementById("medianPremium");
+  medianNode.textContent = formatPercent(median);
+  medianNode.className = `stat-value ${getTrendClass(median)}`;
+}
+
+function updateQdiiData(tencentData, qdiiNavMap) {
+  qdiiData = qdiiList.map(item => {
+    const data = tencentData[item.symbol];
+    const navData = qdiiNavMap[item.symbol];
+    const price = data?.price;
+    const liveNav = typeof data?.nav === "number" && !Number.isNaN(data.nav) && data.nav > 0 ? data.nav : undefined;
+    const fallbackNav = navData?.nav;
+    const nav = liveNav ?? fallbackNav;
+    const navDate = liveNav ? undefined : navData?.navDate;
+    const livePremium = typeof data?.premium === "number" && !Number.isNaN(data.premium) ? data.premium : undefined;
+    const premium = livePremium ?? (
+      typeof price === "number" && typeof nav === "number" && nav > 0
+        ? ((price - nav) / nav) * 100
+        : undefined
+    );
+    const { premiumClass, premiumLabel } = getPremiumMeta(premium);
+
+    return {
+      ...item,
+      price,
+      nav,
+      navDate,
+      premium,
+      premiumClass,
+      premiumLabel
+    };
+  });
+}
+
+function getFilteredItems() {
+  return qdiiData.filter(item => {
+    if (currentQdiiFilter !== "all" && item.indexType !== currentQdiiFilter) {
+      return false;
+    }
+    if (currentQdiiSearch) {
+      const query = currentQdiiSearch.toLowerCase();
+      const matchesName = item.name.toLowerCase().includes(query);
+      const matchesCode = item.symbol.replace(/^(sh|sz)/, "").includes(query);
+      if (!matchesName && !matchesCode) {
+        return false;
+      }
+    }
+    return true;
+  });
+}
+
+function renderQdiiTable() {
+  const tableBody = document.getElementById("qdiiTable");
+  const items = getFilteredItems();
+
+  items.sort((a, b) => {
+    const valA = a[currentQdiiSort.key];
+    const valB = b[currentQdiiSort.key];
+    if (valA === undefined) return currentQdiiSort.desc ? 1 : -1;
+    if (valB === undefined) return currentQdiiSort.desc ? -1 : 1;
+    if (typeof valA === "string") {
+      return currentQdiiSort.desc ? valB.localeCompare(valA) : valA.localeCompare(valB);
+    }
+    return currentQdiiSort.desc ? valB - valA : valA - valB;
+  });
+
+  tableBody.innerHTML = "";
+
+  if (items.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="5" class="neutral">未找到匹配的基金</td></tr>`;
+    return;
+  }
+
+  items.forEach(item => {
+    const row = document.createElement("tr");
+    if (selectedQdiiSymbol === item.symbol) {
+      row.className = "selected";
+    }
+
+    const displayCode = item.symbol.replace(/^(sh|sz)/, "").toUpperCase();
+    row.innerHTML = `
+      <td class="fund-cell">
+        <div class="fund-name">${item.name}</div>
+        <div class="fund-code">${displayCode} · ${item.symbol.startsWith("sh") ? "上交所" : "深交所"}</div>
+      </td>
+      <td class="value-cell neutral">${item.price ? item.price.toFixed(3) : "--"}</td>
+      <td class="value-cell neutral">
+        ${item.nav ? item.nav.toFixed(3) : "--"}
+        <div class="fund-code">${item.navDate ? formatShortDate(item.navDate) : "实时口径"}</div>
+      </td>
+      <td class="value-cell ${getTrendClass(item.premium)}">${formatPercent(item.premium)}</td>
+      <td><span class="badge ${item.premiumClass}">${item.premiumLabel}</span></td>
+    `;
+
+    row.addEventListener("click", () => selectQdiiRow(item));
+    tableBody.appendChild(row);
+  });
+}
+
+function selectQdiiRow(item) {
+  selectedQdiiSymbol = item.symbol;
+  renderQdiiTable();
+
+  if (typeof item.premium !== "number" || !item.nav || !item.price) {
+    document.getElementById("premiumCalc").classList.remove("active");
+    return;
+  }
+
+  const calc = document.getElementById("premiumCalc");
+  calc.classList.add("active");
+  document.getElementById("calcFundTitle").textContent = `${item.name} · 折损模拟`;
+  document.getElementById("calcCurrentPremium").textContent = `${formatPercent(item.premium)} (${item.premiumLabel})`;
+  document.getElementById("calcCurrentPremium").className = getTrendClass(item.premium);
+  updateCalculatorResults(item);
+}
+
+function updateCalculatorResults(item) {
+  if (!item || typeof item.premium !== "number" || !item.nav || !item.price) {
+    return;
+  }
+
+  const amount = parseFloat(document.getElementById("calcAmountInput").value) || 10000;
+  const cleanValue = amount * (item.nav / item.price);
+  const lossValue = amount - cleanValue;
+
+  document.getElementById("calcCleanValue").textContent = `${cleanValue.toFixed(2)} 元`;
+  document.getElementById("calcLossValue").textContent = `${lossValue > 0 ? "-" : "+"}${Math.abs(lossValue).toFixed(2)} 元`;
+  document.getElementById("calcLossValue").className = getTrendClass(lossValue === 0 ? 0 : -lossValue);
+}
+
+async function renderPage() {
+  if (isRefreshing) {
+    return;
+  }
+
+  setRefreshState(true);
+  try {
+    const symbols = qdiiList.map(item => item.symbol);
+    const tencentData = await fetchTencentData(symbols);
+    const qdiiNavMap = await fetchQdiiNavMap();
+
+    updateQdiiData(tencentData, qdiiNavMap);
+    updateSummaryCards(qdiiData);
+    renderQdiiTable();
+
+    if (selectedQdiiSymbol) {
+      const selected = qdiiData.find(item => item.symbol === selectedQdiiSymbol);
+      if (selected) {
+        selectQdiiRow(selected);
+      }
+    }
+
+    const updatedAt = new Date().toLocaleTimeString("zh-CN", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    updateStatus(`已更新 ${updatedAt}`, "ready");
+  } catch (error) {
+    console.error(error);
+    document.getElementById("qdiiTable").innerHTML = `<tr><td colspan="5" class="negative">数据加载失败</td></tr>`;
+    updateStatus("行情加载失败", "error");
+  } finally {
+    setRefreshState(false);
+  }
+}
+
+function initEvents() {
+  document.querySelectorAll(".theme-button").forEach(button => {
+    button.addEventListener("click", () => applyTheme(button.dataset.themeValue));
+  });
+
+  document.getElementById("refreshButton").addEventListener("click", renderPage);
+
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab-btn").forEach(node => node.classList.remove("active"));
+      btn.classList.add("active");
+      currentQdiiFilter = btn.dataset.indexType;
+      renderQdiiTable();
+    });
+  });
+
+  document.getElementById("qdiiSearchInput").addEventListener("input", event => {
+    currentQdiiSearch = event.target.value.trim();
+    renderQdiiTable();
+  });
+
+  document.querySelectorAll("th.sortable").forEach(th => {
+    th.addEventListener("click", () => {
+      const key = th.dataset.sort;
+      if (currentQdiiSort.key === key) {
+        currentQdiiSort.desc = !currentQdiiSort.desc;
+      } else {
+        currentQdiiSort.key = key;
+        currentQdiiSort.desc = true;
+      }
+
+      document.querySelectorAll("th.sortable").forEach(node => node.classList.remove("asc", "desc"));
+      th.classList.add(currentQdiiSort.desc ? "desc" : "asc");
+      renderQdiiTable();
+    });
+  });
+
+  document.getElementById("calcAmountInput").addEventListener("input", () => {
+    const item = qdiiData.find(entry => entry.symbol === selectedQdiiSymbol);
+    if (item) {
+      updateCalculatorResults(item);
+    }
+  });
+
+  document.getElementById("calcCloseBtn").addEventListener("click", () => {
+    selectedQdiiSymbol = null;
+    document.getElementById("premiumCalc").classList.remove("active");
+    renderQdiiTable();
+  });
+}
+
+const savedTheme = localStorage.getItem("portfolio-theme");
+if (savedTheme === "light" || savedTheme === "dark") {
+  applyTheme(savedTheme);
+}
+
+initEvents();
+renderPage();
+</script>
+</body>
+</html>
