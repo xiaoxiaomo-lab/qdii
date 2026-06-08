@@ -197,8 +197,7 @@
   }
 
   .stat,
-  .panel,
-  .calc-container {
+  .panel {
     padding: 14px 14px 13px;
     border: 1px solid var(--line);
     border-radius: 20px;
@@ -210,8 +209,7 @@
   }
 
   .stat::before,
-  .panel::before,
-  .calc-container::before {
+  .panel::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -294,15 +292,6 @@
 
   tbody tr:hover {
     background: var(--table-row-hover);
-  }
-
-  tbody.clickable tr {
-    cursor: pointer;
-  }
-
-  tbody.clickable tr.selected {
-    background: var(--table-row-hover);
-    box-shadow: inset 4px 0 0 var(--blue);
   }
 
   .symbol {
@@ -492,100 +481,6 @@
     border: 1px solid rgba(255, 100, 124, 0.25);
   }
 
-  .calc-container {
-    margin-top: 10px;
-    padding: 12px 14px;
-    border-radius: 16px;
-    background: var(--surface-inset);
-    display: none;
-  }
-
-  .calc-container.active {
-    display: block;
-  }
-
-  .calc-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-    border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-    padding-bottom: 6px;
-  }
-
-  .calc-title {
-    font-size: 12px;
-    font-weight: 700;
-  }
-
-  .calc-close {
-    border: 0;
-    background: transparent;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 14px;
-    padding: 0 4px;
-  }
-
-  .calc-body {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    align-items: center;
-  }
-
-  .calc-input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-  }
-
-  .calc-input-group label {
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  .calc-input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-
-  .calc-input {
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    padding: 6px 30px 6px 10px;
-    background: var(--panel-strong);
-    color: var(--text);
-    font: inherit;
-    font-size: 12px;
-    width: 100%;
-    outline: none;
-  }
-
-  .calc-unit {
-    position: absolute;
-    right: 10px;
-    font-size: 11px;
-    color: var(--muted);
-  }
-
-  .calc-metrics {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    background: var(--surface-inset);
-    padding: 10px;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-  }
-
-  .calc-row {
-    display: flex;
-    justify-content: space-between;
-    font-size: 12px;
-  }
-
   @media (max-width: 980px) {
     .hero {
       flex-direction: column;
@@ -617,11 +512,6 @@
     .search-input,
     .search-input:focus {
       width: 100%;
-    }
-
-    .calc-body {
-      grid-template-columns: 1fr;
-      gap: 10px;
     }
 
     thead th,
@@ -723,33 +613,12 @@
             <th>状态</th>
           </tr>
         </thead>
-        <tbody id="qdiiTable" class="clickable">
+        <tbody id="qdiiTable">
           <tr>
             <td colspan="5" class="neutral">数据加载中...</td>
           </tr>
         </tbody>
       </table>
-    </div>
-
-    <div class="calc-container" id="premiumCalc">
-      <div class="calc-header">
-        <span class="calc-title" id="calcFundTitle">溢价折损模拟器</span>
-        <button class="calc-close" id="calcCloseBtn" type="button" aria-label="关闭">&times;</button>
-      </div>
-      <div class="calc-body">
-        <div class="calc-input-group">
-          <label for="calcAmountInput">模拟买入金额</label>
-          <div class="calc-input-wrap">
-            <input class="calc-input" id="calcAmountInput" type="number" value="10000" min="100" step="100">
-            <span class="calc-unit">元</span>
-          </div>
-        </div>
-        <div class="calc-metrics">
-          <div class="calc-row"><span>当前溢价率</span><strong id="calcCurrentPremium" class="neutral">--</strong></div>
-          <div class="calc-row"><span>净值回归后市值</span><strong id="calcCleanValue">--</strong></div>
-          <div class="calc-row"><span>预计折损金额</span><strong id="calcLossValue" class="neutral">--</strong></div>
-        </div>
-      </div>
     </div>
   </section>
 </div>
@@ -783,7 +652,6 @@ let qdiiData = [];
 let currentQdiiFilter = "all";
 let currentQdiiSearch = "";
 let currentQdiiSort = { key: "premium", desc: true };
-let selectedQdiiSymbol = null;
 
 function applyTheme(theme) {
   document.body.dataset.theme = theme;
@@ -1084,9 +952,6 @@ function renderQdiiTable() {
 
   items.forEach(item => {
     const row = document.createElement("tr");
-    if (selectedQdiiSymbol === item.symbol) {
-      row.className = "selected";
-    }
 
     const displayCode = item.symbol.replace(/^(sh|sz)/, "").toUpperCase();
     row.innerHTML = `
@@ -1103,40 +968,8 @@ function renderQdiiTable() {
       <td><span class="badge ${item.premiumClass}">${item.premiumLabel}</span></td>
     `;
 
-    row.addEventListener("click", () => selectQdiiRow(item));
     tableBody.appendChild(row);
   });
-}
-
-function selectQdiiRow(item) {
-  selectedQdiiSymbol = item.symbol;
-  renderQdiiTable();
-
-  if (typeof item.premium !== "number" || !item.nav || !item.price) {
-    document.getElementById("premiumCalc").classList.remove("active");
-    return;
-  }
-
-  const calc = document.getElementById("premiumCalc");
-  calc.classList.add("active");
-  document.getElementById("calcFundTitle").textContent = `${item.name} · 折损模拟`;
-  document.getElementById("calcCurrentPremium").textContent = `${formatPercent(item.premium)} (${item.premiumLabel})`;
-  document.getElementById("calcCurrentPremium").className = getTrendClass(item.premium);
-  updateCalculatorResults(item);
-}
-
-function updateCalculatorResults(item) {
-  if (!item || typeof item.premium !== "number" || !item.nav || !item.price) {
-    return;
-  }
-
-  const amount = parseFloat(document.getElementById("calcAmountInput").value) || 10000;
-  const cleanValue = amount * (item.nav / item.price);
-  const lossValue = amount - cleanValue;
-
-  document.getElementById("calcCleanValue").textContent = `${cleanValue.toFixed(2)} 元`;
-  document.getElementById("calcLossValue").textContent = `${lossValue > 0 ? "-" : "+"}${Math.abs(lossValue).toFixed(2)} 元`;
-  document.getElementById("calcLossValue").className = getTrendClass(lossValue === 0 ? 0 : -lossValue);
 }
 
 async function renderPage() {
@@ -1151,13 +984,6 @@ async function renderPage() {
     updateQdiiData(tencentData, {});
     updateSummaryCards(qdiiData);
     renderQdiiTable();
-
-    if (selectedQdiiSymbol) {
-      const selected = qdiiData.find(item => item.symbol === selectedQdiiSymbol);
-      if (selected) {
-        selectQdiiRow(selected);
-      }
-    }
 
     const updatedAt = new Date().toLocaleTimeString("zh-CN", {
       hour12: false,
@@ -1183,13 +1009,6 @@ async function renderPage() {
           updateQdiiData(tencentData, fallbackNavMap);
           updateSummaryCards(qdiiData);
           renderQdiiTable();
-
-          if (selectedQdiiSymbol) {
-            const selected = qdiiData.find(item => item.symbol === selectedQdiiSymbol);
-            if (selected) {
-              selectQdiiRow(selected);
-            }
-          }
         })
         .catch(error => {
           console.error("Failed to hydrate fallback NAV data", error);
@@ -1241,18 +1060,6 @@ function initEvents() {
     });
   });
 
-  document.getElementById("calcAmountInput").addEventListener("input", () => {
-    const item = qdiiData.find(entry => entry.symbol === selectedQdiiSymbol);
-    if (item) {
-      updateCalculatorResults(item);
-    }
-  });
-
-  document.getElementById("calcCloseBtn").addEventListener("click", () => {
-    selectedQdiiSymbol = null;
-    document.getElementById("premiumCalc").classList.remove("active");
-    renderQdiiTable();
-  });
 }
 
 const savedTheme = localStorage.getItem("portfolio-theme");
