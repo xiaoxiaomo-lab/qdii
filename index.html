@@ -19,13 +19,11 @@
     --blue: #0a84ff;
     --shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
     --page-bg:
-      radial-gradient(circle at top left, rgba(10, 132, 255, 0.18), transparent 30%),
-      radial-gradient(circle at top right, rgba(100, 210, 255, 0.1), transparent 24%),
+      radial-gradient(circle at top left, rgba(10, 132, 255, 0.2), transparent 30%),
+      radial-gradient(circle at top right, rgba(100, 210, 255, 0.12), transparent 24%),
       linear-gradient(180deg, #111725 0%, #151c2c 48%, #0f1522 100%);
-    --header-chip-bg: rgba(255, 255, 255, 0.08);
     --table-row-hover: rgba(255, 255, 255, 0.055);
     --toggle-bg: rgba(255, 255, 255, 0.06);
-    --toggle-active-bg: rgba(255, 255, 255, 0.16);
     --surface-inset: rgba(255, 255, 255, 0.05);
     --toggle-thumb: #f5f7fb;
     --toggle-active-icon: #0f1522;
@@ -47,10 +45,8 @@
     --page-bg:
       radial-gradient(circle at top left, rgba(0, 122, 255, 0.12), transparent 28%),
       linear-gradient(180deg, #f5f5f7 0%, #eff3f9 52%, #f7f8fb 100%);
-    --header-chip-bg: rgba(255, 255, 255, 0.72);
     --table-row-hover: rgba(60, 60, 67, 0.045);
     --toggle-bg: rgba(120, 120, 128, 0.12);
-    --toggle-active-bg: rgba(255, 255, 255, 0.96);
     --surface-inset: rgba(255, 255, 255, 0.56);
     --toggle-thumb: #111827;
     --toggle-active-icon: #ffffff;
@@ -69,30 +65,32 @@
   }
 
   .shell {
-    width: min(980px, calc(100vw - 24px));
+    width: min(1060px, calc(100vw - 28px));
     margin: 0 auto;
-    padding: 10px 0 16px;
+    padding: 24px 0 28px;
   }
 
   .hero {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: 18px;
-    margin-bottom: 10px;
+    align-items: flex-end;
+    gap: 28px;
+    margin-bottom: 18px;
+    padding: 0 2px;
   }
 
   h1 {
     margin: 0;
-    font-size: clamp(24px, 2.6vw, 30px);
-    line-height: 1.08;
+    font-size: 30px;
+    line-height: 1.05;
+    font-weight: 650;
     letter-spacing: 0;
   }
 
   .subtle {
     color: var(--muted);
-    font-size: 12px;
-    margin-top: 6px;
+    font-size: 13px;
+    margin-top: 8px;
   }
 
   .controls {
@@ -105,16 +103,16 @@
   .action-button {
     border: 1px solid var(--line);
     border-radius: 999px;
-    padding: 7px 12px;
+    padding: 9px 15px;
     background: var(--panel-strong);
     color: var(--text);
     font: inherit;
-    font-size: 11px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 650;
     cursor: pointer;
-    box-shadow: var(--shadow);
-    transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.12);
+    transition: transform 0.2s ease, opacity 0.2s ease, background 0.2s ease;
+    backdrop-filter: blur(28px);
   }
 
   .action-button:hover {
@@ -136,8 +134,8 @@
     padding: 3px;
     border: 1px solid var(--line);
     border-radius: 999px;
-    background: var(--panel-strong);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.04);
+    background: var(--toggle-bg);
+    backdrop-filter: blur(28px);
   }
 
   .theme-toggle::before {
@@ -192,18 +190,18 @@
   .stats {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 10px;
-    margin-bottom: 10px;
+    gap: 12px;
+    margin-bottom: 14px;
   }
 
   .stat,
   .panel {
-    padding: 14px 14px 13px;
+    padding: 18px;
     border: 1px solid var(--line);
-    border-radius: 20px;
+    border-radius: 28px;
     background: var(--panel);
     box-shadow: var(--shadow);
-    backdrop-filter: blur(22px);
+    backdrop-filter: blur(34px) saturate(1.45);
     position: relative;
     overflow: hidden;
   }
@@ -213,7 +211,7 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 26%);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.12), transparent 34%);
     pointer-events: none;
   }
 
@@ -221,26 +219,27 @@
     position: relative;
     color: var(--muted);
     font-size: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .stat-value {
     position: relative;
-    font-size: clamp(22px, 2.5vw, 28px);
-    font-weight: 700;
+    font-size: 30px;
+    font-weight: 650;
     font-variant-numeric: tabular-nums;
   }
 
   .stat-note,
   .panel-meta {
     position: relative;
-    margin-top: 5px;
+    margin-top: 9px;
     color: var(--muted);
     font-size: 11px;
+    line-height: 1.45;
   }
 
   .panel {
-    padding: 14px;
+    padding: 18px;
   }
 
   .panel-header {
@@ -248,20 +247,21 @@
     justify-content: space-between;
     align-items: center;
     gap: 12px;
-    margin-bottom: 10px;
+    margin-bottom: 16px;
     padding: 0 2px;
   }
 
   .panel-title {
     margin: 0;
-    font-size: 17px;
+    font-size: 18px;
+    font-weight: 650;
     letter-spacing: 0;
   }
 
   .table-wrap {
     overflow-x: auto;
     border: 1px solid var(--line);
-    border-radius: 16px;
+    border-radius: 22px;
     background: var(--surface-inset);
   }
 
@@ -271,16 +271,16 @@
   }
 
   thead th {
-    padding: 12px 12px;
+    padding: 13px 16px;
     color: var(--muted);
-    font-size: 12px;
-    font-weight: 600;
+    font-size: 11px;
+    font-weight: 650;
     text-align: left;
     border-bottom: 1px solid var(--line);
   }
 
   tbody td {
-    padding: 13px 12px;
+    padding: 15px 16px;
     border-bottom: 1px solid rgba(148, 163, 184, 0.12);
     font-size: 13px;
     vertical-align: middle;
@@ -295,7 +295,7 @@
   }
 
   .symbol {
-    font-weight: 700;
+    font-weight: 650;
     font-size: 14px;
   }
 
@@ -324,7 +324,7 @@
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 12px;
+    padding: 9px 13px;
     border-radius: 999px;
     background: var(--toggle-bg);
     color: var(--muted);
@@ -355,28 +355,33 @@
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
-    margin-bottom: 10px;
+    margin-bottom: 14px;
   }
 
   .tabs-wrapper {
     display: flex;
     gap: 6px;
     flex-wrap: wrap;
-    padding: 3px;
+    padding: 4px;
     border-radius: 999px;
     background: var(--toggle-bg);
     border: 1px solid var(--line);
   }
 
+  .view-tabs {
+    width: fit-content;
+    margin: 0 0 14px;
+  }
+
   .tab-btn {
     border: 0;
-    padding: 7px 12px;
+    padding: 8px 13px;
     border-radius: 999px;
     background: transparent;
     color: var(--muted);
     font: inherit;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 650;
     cursor: pointer;
     transition: background 0.2s ease, color 0.2s ease;
   }
@@ -384,6 +389,70 @@
   .tab-btn.active {
     background: var(--panel-strong);
     color: var(--text);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .view-panel[hidden] {
+    display: none;
+  }
+
+  .filter-switches {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .switch-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 12px 7px 8px;
+    background: var(--surface-inset);
+    color: var(--muted);
+    font: inherit;
+    font-size: 11px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+
+  .switch-btn::before {
+    content: "";
+    width: 20px;
+    height: 12px;
+    border-radius: 999px;
+    background: rgba(148, 163, 184, 0.32);
+    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
+    transition: background 0.2s ease;
+  }
+
+  .switch-btn::after {
+    content: "";
+    position: absolute;
+    left: 10px;
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    background: var(--muted);
+    transition: transform 0.2s ease, background 0.2s ease;
+  }
+
+  .switch-btn.active {
+    background: var(--panel-strong);
+    color: var(--text);
+  }
+
+  .switch-btn.active::before {
+    background: rgba(48, 209, 88, 0.28);
+  }
+
+  .switch-btn.active::after {
+    transform: translateX(8px);
+    background: var(--green);
   }
 
   .search-box {
@@ -404,18 +473,18 @@
   .search-input {
     border: 1px solid var(--line);
     border-radius: 999px;
-    padding: 7px 12px 7px 28px;
+    padding: 9px 13px 9px 30px;
     background: var(--surface-inset);
     color: var(--text);
     font: inherit;
     font-size: 11px;
     outline: none;
-    width: 170px;
+    width: 190px;
     transition: width 0.2s ease, border-color 0.2s ease;
   }
 
   .search-input:focus {
-    width: 210px;
+    width: 230px;
     border-color: var(--blue);
     background: var(--panel-strong);
   }
@@ -450,8 +519,8 @@
   .badge {
     display: inline-flex;
     align-items: center;
-    padding: 2px 6px;
-    border-radius: 6px;
+    padding: 4px 8px;
+    border-radius: 999px;
     font-size: 10px;
     font-weight: 700;
     line-height: 1.2;
@@ -479,6 +548,14 @@
     background: rgba(255, 100, 124, 0.12);
     color: var(--red);
     border: 1px solid rgba(255, 100, 124, 0.25);
+  }
+
+  .quota-high {
+    color: var(--green);
+  }
+
+  .quota-low {
+    color: var(--amber);
   }
 
   @media (max-width: 980px) {
@@ -537,7 +614,7 @@
   <header class="hero">
     <div>
       <h1>QDII 溢价监控</h1>
-      <div class="subtle">实时参考净值、场内溢价率、折价回归模拟</div>
+      <div class="subtle">实时参考净值、场内溢价率、每分钟自动刷新</div>
     </div>
     <div class="controls">
       <div class="theme-toggle" role="tablist" aria-label="切换主题">
@@ -556,71 +633,140 @@
     </div>
   </header>
 
-  <section class="stats">
-    <article class="stat">
-      <div class="stat-label">监控基金数</div>
-      <div class="stat-value neutral" id="fundCount">--</div>
-      <div class="stat-note">纳斯达克、标普500、美国50</div>
-    </article>
-    <article class="stat">
-      <div class="stat-label">最高溢价</div>
-      <div class="stat-value neutral" id="maxPremium">--</div>
-      <div class="stat-note" id="maxPremiumNote">等待数据</div>
-    </article>
-    <article class="stat">
-      <div class="stat-label">最大折价</div>
-      <div class="stat-value neutral" id="minPremium">--</div>
-      <div class="stat-note" id="minPremiumNote">等待数据</div>
-    </article>
-  </section>
+  <div class="tabs-wrapper view-tabs" role="tablist" aria-label="QDII 页面">
+    <button class="tab-btn view-tab-btn active" type="button" data-view="premium">场内溢价</button>
+    <button class="tab-btn view-tab-btn" type="button" data-view="quota">场外额度</button>
+  </div>
 
-  <section class="panel">
-    <div class="panel-header">
-      <div>
-        <h2 class="panel-title">基金列表</h2>
-        <div class="panel-meta">优先展示行情源实时口径；缺失时回退到最新净值估算</div>
-      </div>
-      <div class="controls">
-        <div class="status" id="fetchStatus">加载中</div>
-        <button class="action-button" type="button" id="refreshButton">刷新</button>
-      </div>
-    </div>
+  <div class="view-panel" id="premiumView">
+    <section class="stats">
+      <article class="stat">
+        <div class="stat-label">监控基金数</div>
+        <div class="stat-value neutral" id="fundCount">--</div>
+        <div class="stat-note">纳斯达克、标普500、美国50</div>
+      </article>
+      <article class="stat">
+        <div class="stat-label">最高溢价</div>
+        <div class="stat-value neutral" id="maxPremium">--</div>
+        <div class="stat-note" id="maxPremiumNote">等待数据</div>
+      </article>
+      <article class="stat">
+        <div class="stat-label">最大折价</div>
+        <div class="stat-value neutral" id="minPremium">--</div>
+        <div class="stat-note" id="minPremiumNote">等待数据</div>
+      </article>
+    </section>
 
-    <div class="filters">
-      <div class="tabs-wrapper">
-        <button class="tab-btn active" type="button" data-index-type="all">全部</button>
-        <button class="tab-btn" type="button" data-index-type="nasdaq">纳斯达克</button>
-        <button class="tab-btn" type="button" data-index-type="sp500">标普500</button>
-        <button class="tab-btn" type="button" data-index-type="us50">美国50</button>
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">基金列表</h2>
+          <div class="panel-meta">优先展示行情源实时口径；缺失时回退到最新净值估算</div>
+        </div>
+        <div class="controls">
+          <div class="status" id="fetchStatus">加载中</div>
+          <button class="action-button" type="button" id="refreshButton">刷新</button>
+        </div>
       </div>
-      <div class="search-box">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-        <input id="qdiiSearchInput" class="search-input" type="text" placeholder="搜索基金代码或简称" aria-label="搜索基金">
-      </div>
-    </div>
 
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th class="sortable" data-sort="name">基金名称 / 代码</th>
-            <th class="sortable" data-sort="price">二级价格</th>
-            <th class="sortable" data-sort="nav">参考净值</th>
-            <th class="sortable desc" data-sort="premium">溢价率</th>
-            <th>状态</th>
-          </tr>
-        </thead>
-        <tbody id="qdiiTable">
-          <tr>
-            <td colspan="5" class="neutral">数据加载中...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
+      <div class="filters">
+        <div class="tabs-wrapper">
+          <button class="tab-btn index-tab-btn active" type="button" data-index-type="all">全部</button>
+          <button class="tab-btn index-tab-btn" type="button" data-index-type="nasdaq">纳斯达克</button>
+          <button class="tab-btn index-tab-btn" type="button" data-index-type="sp500">标普500</button>
+          <button class="tab-btn index-tab-btn" type="button" data-index-type="us50">美国50</button>
+        </div>
+        <div class="search-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input id="qdiiSearchInput" class="search-input" type="text" placeholder="搜索基金代码或简称" aria-label="搜索基金">
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th class="sortable" data-sort="name">基金名称 / 代码</th>
+              <th class="sortable" data-sort="price">二级价格</th>
+              <th class="sortable" data-sort="nav">参考净值</th>
+              <th class="sortable desc" data-sort="premium">溢价率</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody id="qdiiTable">
+            <tr>
+              <td colspan="5" class="neutral">数据加载中...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+  <div class="view-panel" id="quotaView" hidden>
+    <section class="stats">
+      <article class="stat">
+        <div class="stat-label">场外基金数</div>
+        <div class="stat-value neutral" id="quotaFundCount">--</div>
+        <div class="stat-note">宽基被动美股 QDII</div>
+      </article>
+      <article class="stat">
+        <div class="stat-label">可申购数量</div>
+        <div class="stat-value neutral" id="quotaOpenCount">--</div>
+        <div class="stat-note" id="quotaOpenNote">等待数据</div>
+      </article>
+      <article class="stat">
+        <div class="stat-label">最高单日额度</div>
+        <div class="stat-value neutral" id="quotaMaxAmount">--</div>
+        <div class="stat-note" id="quotaMaxNote">等待数据</div>
+      </article>
+    </section>
+
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">场外申购额度</h2>
+          <div class="panel-meta">按宽基指数查看场外 QDII 当日申购额度</div>
+        </div>
+        <div class="controls">
+          <div class="status" id="quotaStatus">待刷新</div>
+          <button class="action-button" type="button" id="quotaRefreshButton">刷新</button>
+        </div>
+      </div>
+
+      <div class="filters">
+        <div class="tabs-wrapper">
+          <button class="tab-btn quota-tab-btn active" type="button" data-quota-type="all">全部</button>
+          <button class="tab-btn quota-tab-btn" type="button" data-quota-type="nasdaq">纳斯达克</button>
+          <button class="tab-btn quota-tab-btn" type="button" data-quota-type="sp500">标普500</button>
+        </div>
+        <div class="filter-switches">
+          <button class="switch-btn quota-option-btn" type="button" data-quota-option="showPaused" aria-pressed="false">显示暂停</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>基金名称 / 代码</th>
+              <th>申购状态</th>
+              <th>单日额度</th>
+              <th>更新时间</th>
+            </tr>
+          </thead>
+          <tbody id="quotaTable">
+            <tr>
+              <td colspan="4" class="neutral">切换后自动查询...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
 </div>
 
 <script>
@@ -646,19 +792,65 @@ const qdiiList = [
   { symbol: "sz159577", fundCode: "159577", name: "美国50ETF汇添富", indexType: "us50" }
 ];
 
+const otcQdiiList = [
+  { name: "华夏纳斯达克100联接A", indexType: "nasdaq", keywords: ["华夏", "纳斯达克100", "联接"], shareClass: "A" },
+  { name: "华夏纳斯达克100联接C", indexType: "nasdaq", keywords: ["华夏", "纳斯达克100", "联接"], shareClass: "C" },
+  { name: "易方达纳斯达克100联接A", indexType: "nasdaq", keywords: ["易方达", "纳斯达克100", "联接"], shareClass: "A" },
+  { name: "易方达纳斯达克100联接C", indexType: "nasdaq", keywords: ["易方达", "纳斯达克100", "联接"], shareClass: "C" },
+  { name: "广发纳斯达克100A", indexType: "nasdaq", keywords: ["广发", "纳斯达克100"], shareClass: "A" },
+  { name: "广发纳斯达克100C", indexType: "nasdaq", keywords: ["广发", "纳斯达克100"], shareClass: "C" },
+  { name: "国泰纳斯达克100联接A", indexType: "nasdaq", keywords: ["国泰", "纳斯达克100"], shareClass: "A" },
+  { name: "国泰纳斯达克100联接C", indexType: "nasdaq", keywords: ["国泰", "纳斯达克100"], shareClass: "C" },
+  { name: "招商纳斯达克100联接A", indexType: "nasdaq", keywords: ["招商", "纳斯达克100"], shareClass: "A" },
+  { name: "招商纳斯达克100联接C", indexType: "nasdaq", keywords: ["招商", "纳斯达克100"], shareClass: "C" },
+  { name: "汇添富纳斯达克100联接A", indexType: "nasdaq", keywords: ["汇添富", "纳斯达克100"], shareClass: "A" },
+  { name: "汇添富纳斯达克100联接C", indexType: "nasdaq", keywords: ["汇添富", "纳斯达克100"], shareClass: "C" },
+  { name: "南方纳斯达克100联接A", indexType: "nasdaq", keywords: ["南方", "纳斯达克100"], shareClass: "A" },
+  { name: "南方纳斯达克100联接C", indexType: "nasdaq", keywords: ["南方", "纳斯达克100"], shareClass: "C" },
+  { name: "博时纳斯达克100联接A", indexType: "nasdaq", keywords: ["博时", "纳斯达克100", "联接"], shareClass: "A" },
+  { name: "博时纳斯达克100联接C", indexType: "nasdaq", keywords: ["博时", "纳斯达克100", "联接"], shareClass: "C" },
+  { name: "华夏标普500联接A", indexType: "sp500", keywords: ["华夏", "标普500", "联接"], shareClass: "A" },
+  { name: "华夏标普500联接C", indexType: "sp500", keywords: ["华夏", "标普500", "联接"], shareClass: "C" },
+  { name: "易方达标普500联接A", indexType: "sp500", keywords: ["易方达", "标普500"], shareClass: "A" },
+  { name: "易方达标普500联接C", indexType: "sp500", keywords: ["易方达", "标普500"], shareClass: "C" },
+  { name: "南方标普500联接A", indexType: "sp500", keywords: ["南方", "标普500"], shareClass: "A" },
+  { name: "南方标普500联接C", indexType: "sp500", keywords: ["南方", "标普500"], shareClass: "C" },
+  { name: "博时标普500联接A", indexType: "sp500", keywords: ["博时", "标普500", "联接"], shareClass: "A" },
+  { name: "博时标普500联接C", indexType: "sp500", keywords: ["博时", "标普500", "联接"], shareClass: "C" },
+  { name: "嘉实标普500联接A", indexType: "sp500", keywords: ["嘉实", "标普500", "联接"], shareClass: "A" },
+  { name: "嘉实标普500联接C", indexType: "sp500", keywords: ["嘉实", "标普500", "联接"], shareClass: "C" },
+  { name: "摩根标普500指数A", indexType: "sp500", keywords: ["摩根", "标普500"], shareClass: "A", aliases: [["上投摩根", "标普500"]] },
+  { name: "摩根标普500指数C", indexType: "sp500", keywords: ["摩根", "标普500"], shareClass: "C", aliases: [["上投摩根", "标普500"]] },
+  { name: "天弘标普500发起A", indexType: "sp500", keywords: ["天弘", "标普500"], shareClass: "A" },
+  { name: "天弘标普500发起C", indexType: "sp500", keywords: ["天弘", "标普500"], shareClass: "C" }
+];
+
 const AUTO_REFRESH_MS = 60 * 1000;
 let isRefreshing = false;
+let isQuotaRefreshing = false;
+let quotaLoaded = false;
+let activeView = "premium";
 let qdiiData = [];
+let quotaData = [];
 let currentQdiiFilter = "all";
+let currentQuotaFilter = "all";
+let quotaOptions = {
+  showPaused: false
+};
 let currentQdiiSearch = "";
 let currentQdiiSort = { key: "premium", desc: true };
+let fundSearchRows;
+let resolvedOtcQdiiList;
+let quotaCache;
+let quotaCacheAt = 0;
+const manualRefreshTimes = {};
 
 function applyTheme(theme) {
   document.body.dataset.theme = theme;
   document.querySelectorAll(".theme-button").forEach(button => {
     button.classList.toggle("active", button.dataset.themeValue === theme);
   });
-  localStorage.setItem("portfolio-theme", theme);
+  localStorage.setItem("qdii-theme", theme);
 }
 
 function formatPercent(value) {
@@ -689,6 +881,418 @@ function formatShortDate(value) {
   const month = String(value.getMonth() + 1).padStart(2, "0");
   const day = String(value.getDate()).padStart(2, "0");
   return `${month}-${day}`;
+}
+
+function formatDateTime(value) {
+  if (!(value instanceof Date) || Number.isNaN(value.getTime())) {
+    return "--";
+  }
+  return value.toLocaleString("zh-CN", {
+    month: "2-digit",
+    day: "2-digit",
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+}
+
+function normalizeText(value) {
+  if (value === undefined || value === null) {
+    return "";
+  }
+  return String(value).trim();
+}
+
+function collectPlainTexts(value) {
+  if (value === undefined || value === null) {
+    return [];
+  }
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    const text = normalizeText(value);
+    return text ? [text] : [];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap(item => collectPlainTexts(item));
+  }
+  if (typeof value === "object") {
+    return Object.entries(value).flatMap(([key, entry]) => {
+      if (entry === undefined || entry === null) {
+        return [];
+      }
+      if (typeof entry === "object") {
+        return collectPlainTexts(entry);
+      }
+      const text = normalizeText(entry);
+      return text ? [`${key}:${text}`] : [];
+    });
+  }
+  return [];
+}
+
+function normalizeFundName(value) {
+  return normalizeText(value)
+    .replace(/纳指100|纳指|NASDAQ100|NASDAQ/g, "纳斯达克100")
+    .replace(/S&P500|SP500|标普五百/g, "标普500")
+    .replace(/[（）()]/g, "")
+    .replace(/人民币|美元现汇|美元|份额|基金|证券投资|指数|发起式|QDII|LOF|ETF|A类|C类/g, "")
+    .replace(/\s+/g, "");
+}
+
+function cleanStatusText(text) {
+  const value = normalizeText(text).replace(/^[^:：]*[:：]/, "");
+  const match = value.match(/(暂停申购|开放申购|限制大额申购|暂停大额申购|限大额申购|可申购|不可申购|申购关闭|申购开放)/);
+  return match ? match[1] : value;
+}
+
+function parseAmountValue(text) {
+  const value = normalizeText(text).replace(/,/g, "");
+  if (!value || value === "--") {
+    return undefined;
+  }
+
+  const numberMatch = value.match(/(\d+(?:\.\d+)?)/);
+  if (!numberMatch) {
+    return undefined;
+  }
+
+  const amount = parseFloat(numberMatch[1]);
+  if (!Number.isFinite(amount)) {
+    return undefined;
+  }
+
+  if (value.includes("亿")) {
+    return amount * 100000000;
+  }
+  if (value.includes("万")) {
+    return amount * 10000;
+  }
+  return amount;
+}
+
+function formatAmountLabel(value, fallback) {
+  if (typeof value !== "number" || Number.isNaN(value)) {
+    return normalizeText(fallback) || "未披露";
+  }
+  if (value >= 100000000) {
+    return `${(value / 100000000).toFixed(2)}亿`;
+  }
+  if (value >= 10000) {
+    return `${(value / 10000).toFixed(0)}万`;
+  }
+  return `${value.toFixed(value >= 100 ? 0 : 2)}元`;
+}
+
+async function fetchJson(url) {
+  try {
+    const res = await fetch(url, {
+      headers: {
+        "Accept": "application/json, text/plain, */*"
+      }
+    });
+    const text = await res.text();
+    const jsonText = text.replace(/^[^(]*\((.*)\);?$/s, "$1").trim();
+    return JSON.parse(jsonText);
+  } catch (error) {
+    return loadJsonp(url);
+  }
+}
+
+function loadJsonp(url) {
+  return new Promise((resolve, reject) => {
+    const callbackName = `__qdiiJsonp_${Date.now()}_${Math.random().toString(16).slice(2)}`;
+    const script = document.createElement("script");
+    const separator = url.includes("?") ? "&" : "?";
+    script.src = `${url}${separator}callback=${callbackName}`;
+    script.async = true;
+
+    const cleanup = () => {
+      delete window[callbackName];
+      script.remove();
+    };
+
+    window[callbackName] = data => {
+      cleanup();
+      resolve(data);
+    };
+
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("Failed to load JSONP data"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+function cleanupFundSearchGlobals() {
+  try {
+    delete window.r;
+  } catch (error) {
+    window.r = undefined;
+  }
+}
+
+function loadEastmoneyFundSearchRows() {
+  if (fundSearchRows) {
+    return Promise.resolve(fundSearchRows);
+  }
+
+  return new Promise((resolve, reject) => {
+    cleanupFundSearchGlobals();
+    const script = document.createElement("script");
+    script.src = `https://fund.eastmoney.com/js/fundcode_search.js?v=${Date.now()}`;
+    script.async = true;
+
+    script.onload = () => {
+      const table = Array.isArray(window.r)
+        ? window.r
+        : Object.values(window).find(value => Array.isArray(value) && Array.isArray(value[0]) && /^\d{6}$/.test(String(value[0][0])));
+      const rows = Array.isArray(table) ? table.map(row => ({
+        code: normalizeText(row[0]),
+        pinyin: normalizeText(row[1]),
+        name: normalizeText(row[2]),
+        type: normalizeText(row[3])
+      })) : [];
+      cleanupFundSearchGlobals();
+      script.remove();
+      fundSearchRows = rows;
+      resolve(rows);
+    };
+
+    script.onerror = () => {
+      cleanupFundSearchGlobals();
+      script.remove();
+      reject(new Error("Failed to load fund search rows"));
+    };
+
+    document.head.appendChild(script);
+  });
+}
+
+function matchesShareClass(name, shareClass) {
+  if (!shareClass) {
+    return true;
+  }
+  if (hasDisallowedShareClass(name)) {
+    return false;
+  }
+  if (shareClass === "A" && !/C(?:类|人民币)?$|C类|C人民币/.test(name)) {
+    return true;
+  }
+  const suffixPattern = new RegExp(`${shareClass}(?:人民币)?$`, "i");
+  return suffixPattern.test(name) || name.includes(`${shareClass}类`) || name.includes(`${shareClass}人民币`);
+}
+
+function hasDisallowedShareClass(name) {
+  return /美元|现汇|现钞|美汇|美钞|(?:^|[^A-Z])(?:B|D|E|H|I|Y)\s*(?:类|人民币|\(人民币\)|（人民币）)?(?:$|[^A-Z])|APP|App|app|互联网|线上|电子直销|专属/.test(name);
+}
+
+function isAllowedOtcFundName(name) {
+  if (hasDisallowedShareClass(name)) {
+    return false;
+  }
+  if (/场内|交易型开放式|ETF基金$|ETF$/.test(name)) {
+    return false;
+  }
+  if (/ETF|LOF/.test(name) && !/联接|连接|QDII-LOF|LOF\)|LOF）/.test(name)) {
+    return false;
+  }
+  return true;
+}
+
+function inferIndexTypeFromFundName(name) {
+  const normalized = normalizeFundName(name);
+  if (normalized.includes("纳斯达克100")) {
+    return "nasdaq";
+  }
+  if (normalized.includes("标普500")) {
+    return "sp500";
+  }
+  return "";
+}
+
+function inferShareClassFromFundName(name) {
+  if (/C(?:类|人民币)?$|C类|C人民币/.test(name)) {
+    return "C";
+  }
+  if (/A(?:类|人民币)?$|A类|A人民币/.test(name)) {
+    return "A";
+  }
+  return "A";
+}
+
+function isBroadPassiveOtcQdiiName(name) {
+  const indexType = inferIndexTypeFromFundName(name);
+  if (!indexType || !isAllowedOtcFundName(name)) {
+    return false;
+  }
+  if (!/A(?:类|人民币)?$|A类|A人民币|C(?:类|人民币)?$|C类|C人民币/.test(name)) {
+    return false;
+  }
+  if (!matchesShareClass(name, inferShareClassFromFundName(name))) {
+    return false;
+  }
+  if (/生物科技|医疗|医药|消费|信息科技|科技|半导体|互联网|1000|中国|港股|越南|印度|德国|法国|日本|农业|油气|黄金|资源|地产/.test(name)) {
+    return false;
+  }
+  return /QDII|FOF|联接|连接|LOF|人民币|指数|发起/.test(name);
+}
+
+function discoverOtcQdiiFromRows(rows) {
+  return rows
+    .filter(row => isBroadPassiveOtcQdiiName(row.name))
+    .map(row => ({
+      fundCode: row.code,
+      name: row.name,
+      indexType: inferIndexTypeFromFundName(row.name),
+      shareClass: inferShareClassFromFundName(row.name),
+      discovered: true
+    }));
+}
+
+function resolveFundFromRows(item, rows) {
+  if (item.fundCode) {
+    return item;
+  }
+
+  const keywords = item.keywords || [];
+  const keywordGroups = [keywords, ...(item.aliases || [])];
+  const matchesKeywordGroup = (normalized, group, allowLoose) => {
+    const activeKeywords = allowLoose ? group.filter(keyword => keyword !== "联接") : group;
+    return activeKeywords.every(keyword => normalized.includes(normalizeFundName(keyword)));
+  };
+  const scoreCandidate = row => {
+    const rawName = row.name;
+    const normalized = normalizeFundName(rawName);
+    let score = 0;
+    if (normalized.includes("联接")) score += 8;
+    if (/QDII|人民币/.test(rawName)) score += 4;
+    if (rawName.includes(item.shareClass)) score += 3;
+    if (/交易型开放式|ETF基金$|ETF$/.test(rawName)) score -= 8;
+    score -= Math.max(0, normalizeFundName(rawName).length - normalizeFundName(item.name).length) * 0.05;
+    return score;
+  };
+  const candidates = rows
+    .filter(row => {
+      const normalized = normalizeFundName(row.name);
+      return keywordGroups.some(group => matchesKeywordGroup(normalized, group, false)) &&
+        matchesShareClass(row.name, item.shareClass) &&
+        isAllowedOtcFundName(row.name);
+    })
+    .sort((a, b) => scoreCandidate(b) - scoreCandidate(a));
+
+  if (candidates.length === 0) {
+    const looseCandidates = rows
+      .filter(row => {
+        const normalized = normalizeFundName(row.name);
+        return keywordGroups.some(group => matchesKeywordGroup(normalized, group, true)) &&
+          matchesShareClass(row.name, item.shareClass) &&
+          isAllowedOtcFundName(row.name);
+      })
+      .sort((a, b) => scoreCandidate(b) - scoreCandidate(a));
+
+    if (looseCandidates.length === 0) {
+      return item;
+    }
+
+    return {
+      ...item,
+      fundCode: looseCandidates[0].code,
+      name: looseCandidates[0].name || item.name
+    };
+  }
+
+  return {
+    ...item,
+    fundCode: candidates[0].code,
+    name: candidates[0].name || item.name
+  };
+}
+
+async function resolveOtcQdiiList() {
+  if (resolvedOtcQdiiList) {
+    return resolvedOtcQdiiList;
+  }
+
+  try {
+    const rows = await loadEastmoneyFundSearchRows();
+    const resolved = otcQdiiList.map(item => resolveFundFromRows(item, rows));
+    const discovered = discoverOtcQdiiFromRows(rows);
+    const seen = new Set();
+    resolvedOtcQdiiList = [...resolved, ...discovered].filter(item => {
+      const key = item.fundCode || `${item.indexType}-${item.name}`;
+      if (seen.has(key)) {
+        return false;
+      }
+      seen.add(key);
+      return true;
+    });
+    return resolvedOtcQdiiList;
+  } catch (error) {
+    console.error("Failed to resolve OTC QDII list", error);
+    resolvedOtcQdiiList = otcQdiiList;
+    return otcQdiiList;
+  }
+}
+
+function pickFirstText(source, keys) {
+  if (!source || typeof source !== "object") {
+    return "";
+  }
+  for (const key of keys) {
+    const direct = normalizeText(source[key]);
+    if (direct) {
+      return direct;
+    }
+
+    const lowerKey = Object.keys(source).find(item => item.toLowerCase() === key.toLowerCase());
+    if (lowerKey) {
+      const value = normalizeText(source[lowerKey]);
+      if (value) {
+        return value;
+      }
+    }
+  }
+  return "";
+}
+
+function unwrapEastmoneyData(payload) {
+  if (!payload || typeof payload !== "object") {
+    return {};
+  }
+  if (payload.Datas && typeof payload.Datas === "object") {
+    return Array.isArray(payload.Datas) ? (payload.Datas[0] || {}) : payload.Datas;
+  }
+  if (payload.data && typeof payload.data === "object") {
+    return Array.isArray(payload.data) ? (payload.data[0] || {}) : payload.data;
+  }
+  return payload;
+}
+
+function findTextsByPattern(source, pattern) {
+  const matches = [];
+  const visit = (value, path) => {
+    if (value === undefined || value === null) {
+      return;
+    }
+    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+      const text = normalizeText(value);
+      const line = path ? `${path}:${text}` : text;
+      if (pattern.test(line)) {
+        matches.push(line);
+      }
+      return;
+    }
+    if (Array.isArray(value)) {
+      value.forEach((item, index) => visit(item, `${path}[${index}]`));
+      return;
+    }
+    if (typeof value === "object") {
+      Object.entries(value).forEach(([key, entry]) => visit(entry, path ? `${path}.${key}` : key));
+    }
+  };
+  visit(source, "");
+  return matches;
 }
 
 async function fetchTencentData(symbols) {
@@ -768,9 +1372,18 @@ function loadEastmoneyFundScript(fundCode) {
 
     script.onload = () => {
       const trend = Array.isArray(window.Data_netWorthTrend) ? [...window.Data_netWorthTrend] : undefined;
+      const purchase = {
+        name: normalizeText(window.fS_name),
+        code: normalizeText(window.fS_code),
+        minPurchase: normalizeText(window.fund_minsg),
+        dailyLimit: normalizeText(window.fund_minsgall),
+        sourceRate: normalizeText(window.fund_sourceRate),
+        rate: normalizeText(window.fund_Rate),
+        buySedemption: window.Data_buySedemption
+      };
       cleanupEastmoneyGlobals();
       script.remove();
-      resolve({ trend });
+      resolve({ trend, purchase });
     };
 
     script.onerror = () => {
@@ -801,6 +1414,254 @@ async function fetchLatestFundNav(fundCode) {
     nav,
     navDate: Number.isFinite(timestamp) ? new Date(timestamp) : undefined
   };
+}
+
+async function fetchEastmoneyMobileQuota(fundCode) {
+  const paramVariants = [
+    {
+      FCODE: fundCode,
+      deviceid: "qdii-web",
+      plat: "Wap",
+      product: "EFund",
+      version: "2.0.0",
+      appType: "ttjj",
+      _: String(Date.now())
+    },
+    {
+      FCODE: fundCode,
+      deviceid: "qdii-web",
+      plat: "Iphone",
+      product: "EFund",
+      Version: "6.8.8",
+      version: "6.8.8",
+      appType: "ttjj",
+      _: String(Date.now())
+    }
+  ];
+  const endpoints = [
+    ["FundMNFInfo", "基金交易信息"],
+    ["FundMNDetailInformation", "基金详情信息"],
+    ["FundMNBasicInformation", "基金基础信息"],
+    ["FundMNJJXQ", "基金详情页"]
+  ];
+
+  let bestResult;
+  for (const [endpoint, sourceName] of endpoints) {
+    for (const paramSet of paramVariants) {
+      try {
+      const params = new URLSearchParams(paramSet);
+      const payload = await fetchJson(`https://fundmobapi.eastmoney.com/FundMNewApi/${endpoint}?${params.toString()}`);
+      const data = unwrapEastmoneyData(payload);
+      const rawText = collectPlainTexts(data).join(" / ");
+      const matchedTexts = findTextsByPattern(data, /申购|限购|限额|额度|上限|暂停大额|购买上限|MAXSG|SGZT|PURCHASE/i);
+      const searchText = `${matchedTexts.join(" / ")} / ${rawText}`;
+      const name = pickFirstText(data, ["SHORTNAME", "FundName", "FUNSHORTNAME", "FNAME", "NAME", "FUNDCNAME"]);
+      const code = pickFirstText(data, ["FCODE", "FundCode", "CODE"]);
+      const statusText = pickFirstText(data, [
+        "SGZT",
+        "SGZTNAME",
+        "SGZTMS",
+        "SGSTATUS",
+        "PURCHASESTATUS",
+        "BUYSTATUS",
+        "BUY_STATUS",
+        "申购状态"
+      ]) || matchedTexts.find(text => /(暂停申购|开放申购|限制大额申购|暂停大额申购|限大额申购|可申购|不可申购|申购关闭|申购开放)/.test(text));
+      const dailyLimitText = pickFirstText(data, [
+        "MAXSG",
+        "MAXSGALL",
+        "DTMAXSG",
+        "DRSGED",
+        "SGSX",
+        "SGED",
+        "LIMITBUY",
+        "BUYUPPER",
+        "PURCHASELIMIT",
+        "PURCHASE_LIMIT",
+        "日申购上限",
+        "单日申购上限",
+        "单日限额",
+        "购买上限"
+      ]) || extractLimitText("", searchText);
+      const dailyLimitValue = parseAmountValue(dailyLimitText);
+      const cleanedStatus = statusText ? cleanStatusText(statusText) : "";
+      const status = cleanedStatus || (dailyLimitText ? "限购" : "");
+      const badge = getQuotaBadge(status || "可申购", dailyLimitText);
+      const result = {
+        name,
+        fundCode: code,
+        status: status || "可申购",
+        statusRaw: searchText,
+        dailyLimitText,
+        dailyLimitValue,
+        badgeClass: badge.className,
+        badgeLabel: badge.label,
+        source: `东方财富${sourceName}`
+      };
+
+      if (dailyLimitValue) {
+        return result;
+      }
+      if (!bestResult || (/暂停|限购|申购/.test(status) && !/暂停|限购|申购/.test(bestResult.status))) {
+        bestResult = result;
+      }
+      } catch (error) {
+        console.error(`Failed to load ${endpoint} for ${fundCode}`, error);
+      }
+    }
+  }
+
+  if (bestResult) {
+    return bestResult;
+  }
+
+  throw new Error(`No quota data for ${fundCode}`);
+}
+
+function extractBuyStatus(purchase) {
+  const raw = purchase?.buySedemption;
+  const values = collectPlainTexts(raw)
+    .map(text => text.replace(/\[object Object\]/g, "").trim())
+    .filter(Boolean);
+  const statusText = values.find(text => /(暂停申购|开放申购|限制大额申购|暂停大额申购|限大额申购|可申购|不可申购|申购关闭|申购开放)/.test(text));
+
+  return {
+    status: statusText ? cleanStatusText(statusText) : "未知",
+    raw: values.join(" / ")
+  };
+}
+
+function extractLimitText(primaryText, rawText) {
+  const primary = normalizeText(primaryText);
+  if (primary && !/^\[object Object\]$/.test(primary)) {
+    return primary;
+  }
+
+  const raw = normalizeText(rawText);
+  const patterns = [
+    /(?:单日|每日|日累计|累计|限额|上限|额度|购买上限)[^0-9一二三四五六七八九十百千万亿]*([0-9,.]+(?:\.\d+)?\s*(?:亿元|万元|元|亿|万)?)/,
+    /([0-9,.]+(?:\.\d+)?\s*(?:亿元|万元|元|亿|万))[^/，。；;]*(?:单日|每日|日累计|累计|限额|上限|额度|购买上限)/
+  ];
+
+  for (const pattern of patterns) {
+    const match = raw.match(pattern);
+    if (match) {
+      return match[1].replace(/\s+/g, "");
+    }
+  }
+
+  return "";
+}
+
+function getQuotaBadge(status, limitText) {
+  const text = `${status} ${limitText}`;
+  if (/暂停|不可|关闭/.test(text)) {
+    return { className: "badge-danger", label: "暂停" };
+  }
+  if (/限|限制|暂停大额/.test(text)) {
+    return { className: "badge-warning", label: "限购" };
+  }
+  if (/开放|申购|可买|买入/.test(text)) {
+    return { className: "badge-discount", label: "可申购" };
+  }
+  return { className: "badge-normal", label: "未知" };
+}
+
+async function fetchOtcQuota(item) {
+  let quota;
+  try {
+    quota = await fetchEastmoneyMobileQuota(item.fundCode);
+  } catch (error) {
+    console.error(`Failed to load mobile quota for ${item.fundCode}`, error);
+  }
+
+  if (!quota) {
+    const { purchase } = await loadEastmoneyFundScript(item.fundCode);
+    const statusMeta = extractBuyStatus(purchase);
+    const dailyLimitText = extractLimitText(purchase?.dailyLimit, statusMeta.raw);
+    const minPurchaseText = normalizeText(purchase?.minPurchase);
+    const dailyLimitValue = parseAmountValue(dailyLimitText);
+    const inferredStatus = statusMeta.status !== "未知" || !minPurchaseText ? statusMeta.status : "可申购";
+    const badge = getQuotaBadge(inferredStatus, dailyLimitText);
+    quota = {
+      name: purchase?.name,
+      fundCode: purchase?.code,
+      status: inferredStatus,
+      statusRaw: statusMeta.raw,
+      dailyLimitText,
+      dailyLimitValue,
+      badgeClass: badge.className,
+      badgeLabel: badge.label,
+      source: "东方财富详情页"
+    };
+  }
+
+  return {
+    ...item,
+    name: quota.name || item.name,
+    fundCode: quota.fundCode || item.fundCode,
+    status: quota.status,
+    statusRaw: quota.statusRaw,
+    dailyLimitText: quota.dailyLimitText,
+    dailyLimitValue: quota.dailyLimitValue,
+    badgeClass: quota.badgeClass,
+    badgeLabel: quota.badgeLabel,
+    source: quota.source,
+    updatedAt: new Date()
+  };
+}
+
+async function fetchOtcQuotaData(forceRefresh = false) {
+  if (!forceRefresh && quotaCache && Date.now() - quotaCacheAt < AUTO_REFRESH_MS) {
+    return quotaCache;
+  }
+
+  const resolvedList = await resolveOtcQdiiList();
+
+  const loadOne = async item => {
+    try {
+      if (!item.fundCode) {
+        throw new Error(`No fund code resolved for ${item.name}`);
+      }
+      return await fetchOtcQuota(item);
+    } catch (error) {
+      console.error(`Failed to load quota for ${item.fundCode || item.name}`, error);
+      const unresolved = !item.fundCode;
+      return {
+        ...item,
+        fundCode: item.fundCode || "--",
+        status: unresolved ? "未匹配代码" : "查询失败",
+        dailyLimitText: "",
+        badgeClass: unresolved ? "badge-normal" : "badge-danger",
+        badgeLabel: unresolved ? "未匹配" : "失败",
+        source: unresolved ? "未匹配基金代码" : "查询失败",
+        updatedAt: new Date()
+      };
+    }
+  };
+
+  const rows = await runWithConcurrency(resolvedList, 6, loadOne);
+  quotaCache = rows.filter(item =>
+    item.badgeLabel !== "失败" &&
+    item.badgeLabel !== "未匹配" &&
+    isAllowedOtcFundName(item.name || "")
+  );
+  quotaCacheAt = Date.now();
+  return quotaCache;
+}
+
+async function runWithConcurrency(items, limit, worker) {
+  const results = [];
+  let cursor = 0;
+  const runners = Array.from({ length: Math.min(limit, items.length) }, async () => {
+    while (cursor < items.length) {
+      const index = cursor;
+      cursor += 1;
+      results[index] = await worker(items[index]);
+    }
+  });
+  await Promise.all(runners);
+  return results;
 }
 
 async function fetchQdiiNavMap() {
@@ -851,11 +1712,33 @@ function updateStatus(text, state) {
   status.className = `status ${state || ""}`.trim();
 }
 
+function updateQuotaStatus(text, state) {
+  const status = document.getElementById("quotaStatus");
+  status.textContent = text;
+  status.className = `status ${state || ""}`.trim();
+}
+
 function setRefreshState(loading) {
   isRefreshing = loading;
   const button = document.getElementById("refreshButton");
   button.disabled = loading;
   button.textContent = loading ? "刷新中..." : "刷新";
+}
+
+function setQuotaRefreshState(loading) {
+  isQuotaRefreshing = loading;
+  const button = document.getElementById("quotaRefreshButton");
+  button.disabled = loading;
+  button.textContent = loading ? "刷新中..." : "刷新";
+}
+
+function runManualRefresh(key, callback) {
+  const now = Date.now();
+  if (now - (manualRefreshTimes[key] || 0) < 500) {
+    return;
+  }
+  manualRefreshTimes[key] = now;
+  callback();
 }
 
 function updateSummaryCards(items) {
@@ -972,6 +1855,116 @@ function renderQdiiTable() {
   });
 }
 
+function getFilteredQuotaItems() {
+  return quotaData.filter(item => {
+    if (currentQuotaFilter !== "all" && item.indexType !== currentQuotaFilter) {
+      return false;
+    }
+    if (!quotaOptions.showPaused && item.badgeLabel === "暂停") {
+      return false;
+    }
+    return true;
+  });
+}
+
+function updateQuotaSummary(items) {
+  document.getElementById("quotaFundCount").textContent = String(items.length);
+
+  const openItems = items.filter(item => item.badgeLabel === "可申购" || item.badgeLabel === "限购");
+  const openNode = document.getElementById("quotaOpenCount");
+  openNode.textContent = String(openItems.length);
+  openNode.className = `stat-value ${openItems.length > 0 ? "positive" : "neutral"}`;
+  document.getElementById("quotaOpenNote").textContent = openItems.length > 0
+    ? `${openItems[0].name} 等`
+    : "暂无可申购";
+
+  const quotaItems = items.filter(item => typeof item.dailyLimitValue === "number" && !Number.isNaN(item.dailyLimitValue));
+  const maxNode = document.getElementById("quotaMaxAmount");
+
+  if (quotaItems.length === 0) {
+    maxNode.textContent = "--";
+    maxNode.className = "stat-value neutral";
+    document.getElementById("quotaMaxNote").textContent = "接口未披露额度";
+    return;
+  }
+
+  const max = quotaItems.reduce((best, item) => item.dailyLimitValue > best.dailyLimitValue ? item : best, quotaItems[0]);
+  maxNode.textContent = formatAmountLabel(max.dailyLimitValue, max.dailyLimitText);
+  maxNode.className = "stat-value positive";
+  document.getElementById("quotaMaxNote").textContent = `${max.name} · ${max.fundCode}`;
+}
+
+function renderQuotaTable() {
+  const tableBody = document.getElementById("quotaTable");
+  const items = getFilteredQuotaItems().sort((a, b) => {
+    const amountA = typeof a.dailyLimitValue === "number" && !Number.isNaN(a.dailyLimitValue) ? a.dailyLimitValue : -1;
+    const amountB = typeof b.dailyLimitValue === "number" && !Number.isNaN(b.dailyLimitValue) ? b.dailyLimitValue : -1;
+    const statusScore = item => {
+      if (item.badgeLabel === "暂停") return 2;
+      if (typeof item.dailyLimitValue === "number" && !Number.isNaN(item.dailyLimitValue)) return 0;
+      return 1;
+    };
+    const scoreDiff = statusScore(a) - statusScore(b);
+    if (scoreDiff !== 0) {
+      return scoreDiff;
+    }
+    return amountB - amountA;
+  });
+  tableBody.innerHTML = "";
+
+  if (items.length === 0) {
+    tableBody.innerHTML = `<tr><td colspan="4" class="neutral">暂无符合筛选的额度数据，可打开隐藏项查看</td></tr>`;
+    updateQuotaSummary(items);
+    return;
+  }
+
+  updateQuotaSummary(items);
+
+  items.forEach(item => {
+    const row = document.createElement("tr");
+    const quotaClass = item.dailyLimitValue && item.dailyLimitValue >= 10000 ? "quota-high" : "neutral";
+    row.innerHTML = `
+      <td>
+        <div class="symbol">${item.name}</div>
+        <div class="name">${item.fundCode} · ${item.indexType === "nasdaq" ? "纳斯达克" : "标普500"}</div>
+      </td>
+      <td>
+        <span class="badge ${item.badgeClass}">${item.badgeLabel}</span>
+      </td>
+      <td class="${quotaClass}">${formatAmountLabel(item.dailyLimitValue, item.dailyLimitText)}</td>
+      <td class="neutral">${formatDateTime(item.updatedAt)}</td>
+    `;
+    tableBody.appendChild(row);
+  });
+}
+
+async function renderQuotaPage(forceRefresh = false) {
+  if (isQuotaRefreshing) {
+    return;
+  }
+
+  setQuotaRefreshState(true);
+  updateQuotaStatus("查询中", "");
+  try {
+    quotaData = await fetchOtcQuotaData(forceRefresh);
+    quotaLoaded = true;
+    renderQuotaTable();
+
+    const updatedAt = new Date().toLocaleTimeString("zh-CN", {
+      hour12: false,
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+    updateQuotaStatus(`已更新 ${updatedAt}`, "ready");
+  } catch (error) {
+    console.error(error);
+    document.getElementById("quotaTable").innerHTML = `<tr><td colspan="4" class="negative">额度加载失败</td></tr>`;
+    updateQuotaStatus("额度加载失败", "error");
+  } finally {
+    setQuotaRefreshState(false);
+  }
+}
+
 async function renderPage() {
   if (isRefreshing) {
     return;
@@ -1028,14 +2021,48 @@ function initEvents() {
     button.addEventListener("click", () => applyTheme(button.dataset.themeValue));
   });
 
-  document.getElementById("refreshButton").addEventListener("click", renderPage);
+  document.getElementById("refreshButton").addEventListener("click", () => runManualRefresh("premium", renderPage));
+  document.getElementById("quotaRefreshButton").addEventListener("click", () => runManualRefresh("quota", () => renderQuotaPage(true)));
 
-  document.querySelectorAll(".tab-btn").forEach(btn => {
+  document.querySelectorAll(".view-tab-btn").forEach(btn => {
     btn.addEventListener("click", () => {
-      document.querySelectorAll(".tab-btn").forEach(node => node.classList.remove("active"));
+      document.querySelectorAll(".view-tab-btn").forEach(node => node.classList.remove("active"));
+      btn.classList.add("active");
+      activeView = btn.dataset.view;
+      document.getElementById("premiumView").hidden = activeView !== "premium";
+      document.getElementById("quotaView").hidden = activeView !== "quota";
+
+      if (activeView === "quota" && !quotaLoaded) {
+        requestAnimationFrame(() => renderQuotaPage());
+      }
+    });
+  });
+
+  document.querySelectorAll(".index-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".index-tab-btn").forEach(node => node.classList.remove("active"));
       btn.classList.add("active");
       currentQdiiFilter = btn.dataset.indexType;
       renderQdiiTable();
+    });
+  });
+
+  document.querySelectorAll(".quota-tab-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".quota-tab-btn").forEach(node => node.classList.remove("active"));
+      btn.classList.add("active");
+      currentQuotaFilter = btn.dataset.quotaType;
+      renderQuotaTable();
+    });
+  });
+
+  document.querySelectorAll(".quota-option-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const option = btn.dataset.quotaOption;
+      quotaOptions[option] = !quotaOptions[option];
+      btn.classList.toggle("active", quotaOptions[option]);
+      btn.setAttribute("aria-pressed", String(quotaOptions[option]));
+      renderQuotaTable();
     });
   });
 
@@ -1062,15 +2089,19 @@ function initEvents() {
 
 }
 
-const savedTheme = localStorage.getItem("portfolio-theme");
+const savedTheme = localStorage.getItem("qdii-theme");
 if (savedTheme === "light" || savedTheme === "dark") {
   applyTheme(savedTheme);
 }
 
 initEvents();
-renderPage();
+requestAnimationFrame(() => renderPage());
 setInterval(() => {
-  renderPage();
+  if (activeView === "quota") {
+    renderQuotaPage();
+  } else {
+    renderPage();
+  }
 }, AUTO_REFRESH_MS);
 </script>
 </body>
